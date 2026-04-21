@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aileen Vergara Gálvez — Kinesióloga</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  :root {
+    --teal: #01696f;
+    --teal-light: #cedcd8;
+    --teal-dark: #0c4e54;
+    --gold: #b08a3e;
+    --bg: #f7f6f2;
+    --surface: #ffffff;
+    --text: #1a1814;
+    --text-muted: #6b6a65;
+    --text-faint: #aaa9a4;
+    --border: rgba(26,24,20,0.1);
+    --font-display: 'Cormorant Garamond', Georgia, serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-10: 2.5rem;
+    --space-12: 3rem;
+  }
+
+  html { -webkit-font-smoothing: antialiased; }
+
+  body {
+    font-family: var(--font-body);
+    font-size: 10.5pt;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.6;
+  }
+
+  /* PRINT */
+  @media print {
+    body { background: white; font-size: 10pt; }
+    .page { box-shadow: none; margin: 0; border-radius: 0; max-width: 100%; }
+    .print-btn { display: none; }
+    @page { margin: 0; size: A4; }
+  }
+
+  /* SCREEN WRAPPER */
+  .wrapper {
+    min-height: 100vh;
+    background: var(--bg);
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .print-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--teal);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0.6rem 1.4rem;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    letter-spacing: 0.03em;
+    transition: background 0.18s;
+  }
+  .print-btn:hover { background: var(--teal-dark); }
+
+  /* PAGE */
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    background: var(--surface);
+    box-shadow: 0 4px 32px rgba(0,0,0,0.12);
+    border-radius: 2px;
+    display: grid;
+    grid-template-columns: 68mm 1fr;
+    overflow: hidden;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    background: #0f3638;
+    color: #e8f0ef;
+    padding: var(--space-10) var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .avatar-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .avatar {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--teal) 0%, #4f98a3 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid rgba(255,255,255,0.15);
+    flex-shrink: 0;
+  }
+
+  .avatar svg { width: 42px; height: 42px; opacity: 0.9; }
+
+  .sidebar-name {
+    text-align: center;
+  }
+  .sidebar-name h1 {
+    font-family: var(--font-display);
+    font-size: 1.45rem;
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+  }
+  .sidebar-name h1 span {
+    display: block;
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(255,255,255,0.75);
+    font-size: 1.1rem;
+  }
+  .sidebar-title {
+    margin-top: var(--space-2);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #4f98a3;
+    text-align: center;
+  }
+
+  .sidebar-divider {
+    width: 32px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--teal), transparent);
+    margin: 0 auto;
+  }
+
+  /* SIDEBAR SECTIONS */
+  .sb-section { display: flex; flex-direction: column; gap: var(--space-3); }
+
+  .sb-section-title {
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #4f98a3;
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid rgba(79,152,163,0.3);
+  }
+
+  /* CONTACT */
+  .contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    font-size: 0.78rem;
+    color: rgba(232,240,239,0.85);
+    line-height: 1.45;
+  }
+  .contact-item svg {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: #4f98a3;
+  }
+
+  /* SKILLS */
+  .skill-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .skill-label {
+    font-size: 0.76rem;
+    color: rgba(232,240,239,0.85);
+  }
+  .skill-bar {
+    height: 3px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .skill-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4f98a3, #01696f);
+    border-radius: 99px;
+  }
+
+  /* SOFT SKILLS LIST */
+  .soft-skill {
+    font-size: 0.75rem;
+    color: rgba(232,240,239,0.8);
+    padding: 3px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  .soft-skill::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #4f98a3;
+    flex-shrink: 0;
+  }
+
+  /* MAIN CONTENT */
+  .main {
+    padding: var(--space-10) var(--space-8) var(--space-8);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  /* HEADER TOP */
+  .main-header {
+    border-bottom: 2px solid #0f3638;
+    padding-bottom: var(--space-4);
+  }
+  .main-header h2 {
+    font-family: var(--font-display);
+    font-size: 2.4rem;
+    font-weight: 300;
+    color: #0f3638;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+  .main-header h2 strong {
+    font-weight: 600;
+    display: block;
+  }
+  .main-header .subtitle {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-top: var(--space-2);
+  }
+
+  /* SECTION */
+  .section { display: flex; flex-direction: column; gap: var(--space-3); }
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #0f3638;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, #0f3638 0%, transparent 100%);
+    opacity: 0.2;
+  }
+
+  /* TIMELINE ENTRY */
+  .entry {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-3) var(--space-3) var(--space-4);
+    border-left: 2px solid var(--teal-light);
+    position: relative;
+    transition: border-color 0.2s;
+  }
+  .entry::before {
+    content: '';
+    position: absolute;
+    left: -5px;
+    top: var(--space-3);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--teal);
+    border: 2px solid white;
+    box-shadow: 0 0 0 1px var(--teal);
+  }
+
+  .entry-title {
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .entry-subtitle {
+    font-size: 0.78rem;
+    color: var(--teal-dark);
+    font-weight: 500;
+    margin-top: 1px;
+  }
+  .entry-date {
+    font-size: 0.7rem;
+    color: var(--text-faint);
+    font-weight: 500;
+    white-space: nowrap;
+    letter-spacing: 0.04em;
+    text-align: right;
+    margin-top: 2px;
+  }
+  .entry-body {
+    grid-column: 1 / -1;
+    margin-top: var(--space-1);
+  }
+  .entry-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .entry-list li {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    padding-left: 1em;
+    position: relative;
+    line-height: 1.5;
+  }
+  .entry-list li::before {
+    content: '–';
+    position: absolute;
+    left: 0;
+    color: var(--teal);
+  }
+
+  /* CURSOS GRID */
+  .cursos-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2);
+  }
+  .curso-card {
+    background: #f7f9f9;
+    border: 1px solid rgba(1,105,111,0.12);
+    border-radius: 6px;
+    padding: var(--space-2) var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .curso-card .curso-name {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .curso-card .curso-org {
+    font-size: 0.68rem;
+    color: var(--teal);
+    font-weight: 500;
+  }
+  .curso-card .curso-badge {
+    display: inline-block;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: rgba(1,105,111,0.1);
+    color: var(--teal-dark);
+    padding: 1px 6px;
+    border-radius: 99px;
+    margin-top: 2px;
+    width: fit-content;
+  }
+
+  /* FOOTER */
+  .page-footer {
+    margin-top: auto;
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border);
+    font-size: 0.65rem;
+    color: var(--text-faint);
+    letter-spacing: 0.06em;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 800px) {
+    .page {
+      width: 100%;
+      grid-template-columns: 1fr;
+    }
+    .sidebar { padding: 2rem 1.5rem; }
+    .main { padding: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <button class="print-btn" onclick="window.print()">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+    Imprimir / Guardar PDF
+  </button>
+
+  <div class="page">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <!-- AVATAR + NOMBRE -->
+      <div class="avatar-wrap">
+        <div class="avatar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+        <div class="sidebar-name">
+          <h1>Aileen Vergara<span>Gálvez</span></h1>
+          <div class="sidebar-title">Kinesióloga</div>
+        </div>
+      </div>
+
+      <div class="sidebar-divider"></div>
+
+      <!-- CONTACTO -->
+      <div class="sb-section">
+        <div class="sb-section-title">Contacto</div>
+
+        <div class="contact-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>La Espiga #4582<br>La Serena, Chile</span>
+        </div>
+
+        <div class="contact-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.1 19.79 19.79 0 0 1 1.6 4.56 2 2 0 0 1 3.58 2.36h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7 2 2 0 0 1 1.72 2.03z"/></svg>
+          <span>+56 9 5001 7359</span>
+        </div>
+
+        <div class="contact-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <span>aileenfvergarag<br>@gmail.com</span>
+        </div>
+
+        <div class="contact-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span>Chilena · Soltera<br>RUT 20.864.005-4</span>
+        </div>
+      </div>
+
+      <!-- ÁREAS CLÍNICAS -->
+      <div class="sb-section">
+        <div class="sb-section-title">Áreas Clínicas</div>
+        <div class="skill-item">
+          <div class="skill-label">Kinesiología Respiratoria</div>
+          <div class="skill-bar"><div class="skill-fill" style="width:92%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-label">Rehabilitación Funcional</div>
+          <div class="skill-bar"><div class="skill-fill" style="width:88%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-label">Evaluación y Diagnóstico</div>
+          <div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-label">Atención Domiciliaria</div>
+          <div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-label">Prescripción de Ejercicio</div>
+          <div class="skill-bar"><div class="skill-fill" style="width:78%"></div></div>
+        </div>
+      </div>
+
+      <!-- APTITUDES -->
+      <div class="sb-section">
+        <div class="sb-section-title">Aptitudes</div>
+        <div class="soft-skill">Proactividad y motivación</div>
+        <div class="soft-skill">Empatía y paciencia</div>
+        <div class="soft-skill">Trabajo en equipo</div>
+        <div class="soft-skill">Organización y planificación</div>
+        <div class="soft-skill">Comunicación efectiva</div>
+        <div class="soft-skill">Cumplimiento normativo</div>
+        <div class="soft-skill">Vocación de servicio</div>
+        <div class="soft-skill">Responsabilidad y ética</div>
+        <div class="soft-skill">Perseverancia y disciplina</div>
+        <div class="soft-skill">Disponibilidad horaria</div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <!-- HEADER -->
+      <div class="main-header">
+        <h2><strong>Aileen Vergara</strong> Gálvez</h2>
+        <div class="subtitle">Kinesióloga · Universidad Católica del Norte</div>
+      </div>
+
+      <!-- PERFIL PROFESIONAL -->
+      <div class="section">
+        <div class="section-title">Perfil Profesional</div>
+        <p style="font-size:0.82rem; color:#4a4a46; line-height:1.65; padding-left:1rem; border-left: 2px solid var(--teal-light);">
+          Kinesióloga titulada de la Universidad Católica del Norte, con sólida formación clínica en el área respiratoria, funcional y comunitaria. Experiencia práctica en centros de salud de atención primaria, hospitalaria y domiciliaria de la Región de Coquimbo. Comprometida con el bienestar integral del paciente, con orientación a la educación terapéutica y la adherencia al tratamiento.
+        </p>
+      </div>
+
+      <!-- EXPERIENCIA -->
+      <div class="section">
+        <div class="section-title">Historial Laboral</div>
+
+        <div class="entry">
+          <div>
+            <div class="entry-title">Interna de Kinesiología · UCN</div>
+            <div class="entry-subtitle">Rotación multiplex — Red de salud Coquimbo / La Serena</div>
+          </div>
+          <div class="entry-date">Ene 2025<br>Nov 2025</div>
+          <div class="entry-body">
+            <ul class="entry-list">
+              <li>Servicio de Medicina · Hospital San Pablo de Coquimbo</li>
+              <li>CCR y Salas IRA/ERA · Cesfam Emilio Schaffhauser, La Serena</li>
+              <li>Hospitalización domiciliaria · Hospital San Pablo de Coquimbo</li>
+              <li>Sala IRA/ERA · Cesfam Villa San Rafael, Illapel</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="entry">
+          <div>
+            <div class="entry-title">Servicios Kinesiológicos a Domicilio</div>
+            <div class="entry-subtitle">Prestadora independiente · La Serena</div>
+          </div>
+          <div class="entry-date">Actualidad</div>
+          <div class="entry-body">
+            <ul class="entry-list">
+              <li>Evaluación y tratamiento integral con planes terapéuticos personalizados</li>
+              <li>Rehabilitación funcional: recuperación del movimiento y manejo del dolor</li>
+              <li>Educación y prevención: pautas de ejercicio para adherencia al tratamiento</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- FORMACIÓN -->
+      <div class="section">
+        <div class="section-title">Formación Académica</div>
+        <div class="entry">
+          <div>
+            <div class="entry-title">Kinesiología — Licenciatura en Kinesiología</div>
+            <div class="entry-subtitle">Universidad Católica del Norte · Coquimbo</div>
+          </div>
+          <div class="entry-date">Mar 2020<br>Ene 2026</div>
+        </div>
+        <div class="entry">
+          <div>
+            <div class="entry-title">Enseñanza Básica y Media</div>
+            <div class="entry-subtitle">Colegio Andrés Bello · La Serena</div>
+          </div>
+          <div class="entry-date">2007 – 2019</div>
+        </div>
+      </div>
+
+      <!-- CURSOS Y CERTIFICACIONES -->
+      <div class="section">
+        <div class="section-title">Cursos y Certificaciones</div>
+        <div class="cursos-grid">
+
+          <div class="curso-card">
+            <div class="curso-name">Planificación y gestión del oxígeno medicinal</div>
+            <div class="curso-org">OPS</div>
+          </div>
+
+          <div class="curso-card">
+            <div class="curso-name">Protección frente a infecciones respiratorias en salud</div>
+            <div class="curso-org">OPS</div>
+          </div>
+
+          <div class="curso-card">
+            <div class="curso-name">Prescripción de ejercicio en adulto mayor</div>
+            <div class="curso-org">CapacitaNet</div>
+          </div>
+
+          <div class="curso-card">
+            <div class="curso-name">Usos y cuidados de ayudas técnicas</div>
+            <div class="curso-org">Academia SENADIS</div>
+          </div>
+
+          <div class="curso-card">
+            <div class="curso-name">Procedimientos de espirometría (120 hrs)</div>
+            <div class="curso-org">CapacitaNet</div>
+          </div>
+
+          <div class="curso-card">
+            <div class="curso-name">Evaluación y entrenamiento de músculos respiratorios</div>
+            <div class="curso-org">Rehabilitacion.cl</div>
+          </div>
+
+          <div class="curso-card">
+            <div class="curso-name">Ventilación mecánica invasiva y no invasiva (120 hrs)</div>
+            <div class="curso-org">CapacitaNet</div>
+            <span class="curso-badge">En curso</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="page-footer">
+        <span>Aileen Vergara Gálvez · Kinesióloga</span>
+        <span>La Serena, Chile · 2026</span>
+      </div>
+    </main>
+  </div>
+</div>
+</body>
+</html>
