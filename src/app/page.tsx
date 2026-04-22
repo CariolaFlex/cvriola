@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { CVEditor } from '@/components/editor/CVEditor';
 import { CVPreview } from '@/components/preview/CVPreview';
 import { Dashboard } from '@/components/editor/Dashboard';
@@ -10,11 +10,23 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import { TEMPLATE_MAP } from '@/components/templates/CVTemplates';
 import { renderToStaticMarkup } from 'react-dom/server';
+import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'sonner';
 
 export default function Home() {
-  const { cvData, activeView, setActiveView } = useCVStore();
+  const { cvData, activeView, setActiveView, saveCV } = useCVStore();
   const previewRef = useRef<HTMLDivElement>(null);
   const [isExporting, setIsExporting] = useState(false);
+
+  // Auto-save on changes
+  useEffect(() => {
+    if (cvData) {
+      const timer = setTimeout(() => {
+        saveCV();
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [cvData, saveCV]);
 
   const generateHTML = useCallback(() => {
     if (!cvData) return '';
@@ -38,12 +50,12 @@ export default function Home() {
   <link href="https://fonts.googleapis.com/css2?family=${encodeURIComponent(headingFont)}:wght@400;600;700&family=${encodeURIComponent(bodyFont)}:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #f5f5f5; padding: 20px; }
-    .cv-template { margin: 0 auto; }
+    body { background: #f5f5f5; padding: 20px; font-family: '${bodyFont}', sans-serif; }
+    .cv-template { margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
     @media print {
       body { background: white; padding: 0; }
       .cv-template { box-shadow: none; }
-      @page { margin: 0; }
+      @page { margin: 0; size: A4; }
     }
   </style>
 </head>
@@ -60,7 +72,6 @@ export default function Home() {
     try {
       const html = generateHTML();
       
-      // Open print dialog
       const printWindow = window.open('', '_blank');
       if (printWindow) {
         printWindow.document.write(html);
@@ -68,9 +79,13 @@ export default function Home() {
         setTimeout(() => {
           printWindow.print();
         }, 500);
+        toast.success('PDF listo para imprimir', {
+          description: 'Usa el diálogo de impresión para guardar como PDF'
+        });
       }
     } catch (error) {
       console.error('Error exporting PDF:', error);
+      toast.error('Error al exportar PDF');
     } finally {
       setIsExporting(false);
     }
@@ -82,15 +97,26 @@ export default function Home() {
     
     try {
       const cvElement = previewRef.current.querySelector('.cv-template');
-      if (!cvElement) return;
+      if (!cvElement) {
+        toast.error('No se encontró el CV para exportar');
+        return;
+      }
       
-      // Create canvas
+      // Create a canvas with proper dimensions
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
       
-      // Use html2canvas approach via SVG
-      const svgData = `<svg xmlns="http://www.w3.org/2000/svg" width="${cvElement.clientWidth}" height="${cvElement.clientHeight}">
+      const scale = 2; // High resolution
+      const width = cvElement.clientWidth;
+      const height = cvElement.clientHeight;
+      
+      canvas.width = width * scale;
+      canvas.height = height * scale;
+      ctx.scale(scale, scale);
+      
+      // Use foreignObject SVG approach
+      const svgData = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
         <foreignObject width="100%" height="100%">
           <div xmlns="http://www.w3.org/1999/xhtml">
             ${cvElement.innerHTML}
@@ -103,9 +129,6 @@ export default function Home() {
       
       const img = new Image();
       img.onload = () => {
-        canvas.width = img.width * 2;
-        canvas.height = img.height * 2;
-        ctx.scale(2, 2);
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(img, 0, 0);
@@ -117,10 +140,19 @@ export default function Home() {
         
         URL.revokeObjectURL(url);
         setIsExporting(false);
+        toast.success(`${format.toUpperCase()} exportado correctamente`);
       };
+      
+      img.onerror = () => {
+        toast.error('Error al generar la imagen');
+        URL.revokeObjectURL(url);
+        setIsExporting(false);
+      };
+      
       img.src = url;
     } catch (error) {
       console.error('Error exporting image:', error);
+      toast.error('Error al exportar imagen');
       setIsExporting(false);
     }
   };
@@ -141,6 +173,7 @@ export default function Home() {
     link.click();
     
     URL.revokeObjectURL(url);
+    toast.success('HTML exportado correctamente');
   };
 
   // Dashboard view
@@ -150,7 +183,7 @@ export default function Home() {
 
   // Editor view
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-screen flex flex-col bg-background">
       {/* Toolbar */}
       <Toolbar
         onExportPDF={exportPDF}
@@ -161,29 +194,44 @@ export default function Home() {
       />
 
       {/* Main Content */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex overflow-hidden relative">
         {/* Back Button */}
-        <div className="absolute top-16 left-4 z-10">
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="absolute top-4 left-4 z-10"
+        >
           <Button
-            variant="ghost"
+            variant="secondary"
             size="sm"
             onClick={() => setActiveView('dashboard')}
-            className="gap-1"
+            className="gap-2 shadow-lg"
           >
             <ArrowLeft className="h-4 w-4" />
             Volver
           </Button>
-        </div>
+        </motion.div>
 
         {/* Editor Panel */}
-        <div className="w-[400px] border-r overflow-hidden">
+        <motion.div 
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.3 }}
+          className="w-[400px] border-r overflow-hidden bg-muted/30"
+        >
           <CVEditor />
-        </div>
+        </motion.div>
 
         {/* Preview Panel */}
-        <div className="flex-1" ref={previewRef}>
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+          className="flex-1" 
+          ref={previewRef}
+        >
           <CVPreview />
-        </div>
+        </motion.div>
       </div>
     </div>
   );

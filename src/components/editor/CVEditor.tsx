@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
@@ -61,23 +62,44 @@ function CollapsibleSection({
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   return (
-    <div className="border rounded-lg overflow-hidden mb-3">
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="border rounded-xl overflow-hidden mb-3 bg-card shadow-sm"
+    >
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100 transition-colors"
+        className="w-full flex items-center justify-between p-3.5 bg-muted/30 hover:bg-muted/50 transition-colors"
       >
         <div className="flex items-center gap-3">
-          <div className="text-slate-600">{icon}</div>
-          <span className="font-medium text-slate-700">{title}</span>
+          <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+            {icon}
+          </div>
+          <span className="font-medium text-foreground">{title}</span>
         </div>
-        {isOpen ? <ChevronUp className="h-4 w-4 text-slate-400" /> : <ChevronDown className="h-4 w-4 text-slate-400" />}
+        <motion.div
+          animate={{ rotate: isOpen ? 180 : 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <ChevronDown className="h-4 w-4 text-muted-foreground" />
+        </motion.div>
       </button>
-      {isOpen && (
-        <div className="p-4 space-y-4 bg-white">
-          {children}
-        </div>
-      )}
-    </div>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="overflow-hidden"
+          >
+            <div className="p-4 space-y-4 bg-card">
+              {children}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 }
 
@@ -91,71 +113,77 @@ function PersonalInfoForm() {
     <CollapsibleSection id="basics" title="Información Personal" icon={SECTION_ICONS.basics} defaultOpen>
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="name">Nombre Completo</Label>
+          <Label htmlFor="name" className="text-sm font-medium">Nombre Completo</Label>
           <Input
             id="name"
             value={cvData.basics.name}
             onChange={(e) => updateBasics({ name: e.target.value })}
             placeholder="Juan Pérez"
+            className="mt-1.5"
           />
         </div>
         <div>
-          <Label htmlFor="label">Título Profesional</Label>
+          <Label htmlFor="label" className="text-sm font-medium">Título Profesional</Label>
           <Input
             id="label"
             value={cvData.basics.label}
             onChange={(e) => updateBasics({ label: e.target.value })}
             placeholder="Ingeniero de Software"
+            className="mt-1.5"
           />
         </div>
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email" className="text-sm font-medium">Email</Label>
           <Input
             id="email"
             type="email"
             value={cvData.basics.email}
             onChange={(e) => updateBasics({ email: e.target.value })}
             placeholder="juan@ejemplo.com"
+            className="mt-1.5"
           />
         </div>
         <div>
-          <Label htmlFor="phone">Teléfono</Label>
+          <Label htmlFor="phone" className="text-sm font-medium">Teléfono</Label>
           <Input
             id="phone"
             value={cvData.basics.phone}
             onChange={(e) => updateBasics({ phone: e.target.value })}
             placeholder="+56 9 1234 5678"
+            className="mt-1.5"
           />
         </div>
       </div>
       <div>
-        <Label htmlFor="url">Sitio Web / LinkedIn</Label>
+        <Label htmlFor="url" className="text-sm font-medium">Sitio Web / LinkedIn</Label>
         <Input
           id="url"
           value={cvData.basics.url}
           onChange={(e) => updateBasics({ url: e.target.value })}
           placeholder="https://linkedin.com/in/juanperez"
+          className="mt-1.5"
         />
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="city">Ciudad</Label>
+          <Label htmlFor="city" className="text-sm font-medium">Ciudad</Label>
           <Input
             id="city"
             value={cvData.basics.location.city}
             onChange={(e) => updateBasics({ location: { ...cvData.basics.location, city: e.target.value } })}
             placeholder="Santiago"
+            className="mt-1.5"
           />
         </div>
         <div>
-          <Label htmlFor="country">País</Label>
+          <Label htmlFor="country" className="text-sm font-medium">País</Label>
           <Select 
             value={cvData.basics.location.countryCode} 
             onValueChange={(v) => updateBasics({ location: { ...cvData.basics.location, countryCode: v } })}
           >
-            <SelectTrigger>
+            <SelectTrigger className="mt-1.5">
               <SelectValue placeholder="Seleccionar país" />
             </SelectTrigger>
             <SelectContent>
@@ -170,13 +198,14 @@ function PersonalInfoForm() {
         </div>
       </div>
       <div>
-        <Label htmlFor="summary">Resumen Profesional</Label>
+        <Label htmlFor="summary" className="text-sm font-medium">Resumen Profesional</Label>
         <Textarea
           id="summary"
           value={cvData.basics.summary}
           onChange={(e) => updateBasics({ summary: e.target.value })}
           placeholder="Describe brevemente tu perfil profesional..."
           rows={4}
+          className="mt-1.5 resize-none"
         />
       </div>
     </CollapsibleSection>
@@ -215,71 +244,91 @@ function WorkForm() {
 
   return (
     <CollapsibleSection id="work" title="Experiencia Laboral" icon={SECTION_ICONS.work}>
-      {cvData.work.map((job, idx) => (
-        <div key={job.id} className="border rounded-lg p-4 space-y-3 bg-slate-50">
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-slate-500">Trabajo {idx + 1}</span>
-            <Button variant="ghost" size="sm" onClick={() => removeWork(job.id)}>
-              <Trash2 className="h-4 w-4 text-red-500" />
-            </Button>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
+      <AnimatePresence mode="popLayout">
+        {cvData.work.map((job, idx) => (
+          <motion.div
+            key={job.id}
+            layout
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="border rounded-xl p-4 space-y-3 bg-muted/30"
+          >
+            <div className="flex justify-between items-center">
+              <span className="text-sm font-medium text-muted-foreground">Trabajo {idx + 1}</span>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => removeWork(job.id)}
+                className="h-8 w-8 p-0 hover:bg-destructive/10 hover:text-destructive"
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label className="text-xs font-medium">Empresa</Label>
+                <Input
+                  value={job.company}
+                  onChange={(e) => updateWorkItem(job.id, { company: e.target.value })}
+                  placeholder="Nombre de la empresa"
+                  className="mt-1 h-9"
+                />
+              </div>
+              <div>
+                <Label className="text-xs font-medium">Cargo</Label>
+                <Input
+                  value={job.position}
+                  onChange={(e) => updateWorkItem(job.id, { position: e.target.value })}
+                  placeholder="Tu cargo"
+                  className="mt-1 h-9"
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label className="text-xs font-medium">Fecha Inicio</Label>
+                <Input
+                  type="month"
+                  value={job.startDate}
+                  onChange={(e) => updateWorkItem(job.id, { startDate: e.target.value })}
+                  className="mt-1 h-9"
+                />
+              </div>
+              <div>
+                <Label className="text-xs font-medium">Fecha Término</Label>
+                <Input
+                  type="month"
+                  value={job.endDate}
+                  onChange={(e) => updateWorkItem(job.id, { endDate: e.target.value })}
+                  placeholder="Dejar vacío si es actual"
+                  className="mt-1 h-9"
+                />
+              </div>
+            </div>
             <div>
-              <Label>Empresa</Label>
+              <Label className="text-xs font-medium">Ubicación</Label>
               <Input
-                value={job.company}
-                onChange={(e) => updateWorkItem(job.id, { company: e.target.value })}
-                placeholder="Nombre de la empresa"
+                value={job.location}
+                onChange={(e) => updateWorkItem(job.id, { location: e.target.value })}
+                placeholder="Ciudad, País"
+                className="mt-1 h-9"
               />
             </div>
             <div>
-              <Label>Cargo</Label>
-              <Input
-                value={job.position}
-                onChange={(e) => updateWorkItem(job.id, { position: e.target.value })}
-                placeholder="Tu cargo"
+              <Label className="text-xs font-medium">Descripción</Label>
+              <Textarea
+                value={job.summary}
+                onChange={(e) => updateWorkItem(job.id, { summary: e.target.value })}
+                placeholder="Describe tus responsabilidades..."
+                rows={3}
+                className="mt-1 resize-none"
               />
             </div>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <Label>Fecha Inicio</Label>
-              <Input
-                type="month"
-                value={job.startDate}
-                onChange={(e) => updateWorkItem(job.id, { startDate: e.target.value })}
-              />
-            </div>
-            <div>
-              <Label>Fecha Término</Label>
-              <Input
-                type="month"
-                value={job.endDate}
-                onChange={(e) => updateWorkItem(job.id, { endDate: e.target.value })}
-                placeholder="Dejar vacío si es actual"
-              />
-            </div>
-          </div>
-          <div>
-            <Label>Ubicación</Label>
-            <Input
-              value={job.location}
-              onChange={(e) => updateWorkItem(job.id, { location: e.target.value })}
-              placeholder="Ciudad, País"
-            />
-          </div>
-          <div>
-            <Label>Descripción</Label>
-            <Textarea
-              value={job.summary}
-              onChange={(e) => updateWorkItem(job.id, { summary: e.target.value })}
-              placeholder="Describe tus responsabilidades..."
-              rows={3}
-            />
-          </div>
-        </div>
-      ))}
-      <Button variant="outline" onClick={addNewWork} className="w-full">
+          </motion.div>
+        ))}
+      </AnimatePresence>
+      <Button variant="outline" onClick={addNewWork} className="w-full h-9 border-dashed">
         <Plus className="h-4 w-4 mr-2" /> Agregar Trabajo
       </Button>
     </CollapsibleSection>
@@ -317,60 +366,77 @@ function EducationForm() {
 
   return (
     <CollapsibleSection id="education" title="Educación" icon={SECTION_ICONS.education}>
-      {cvData.education.map((edu, idx) => (
-        <div key={edu.id} className="border rounded-lg p-4 space-y-3 bg-slate-50">
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-slate-500">Educación {idx + 1}</span>
-            <Button variant="ghost" size="sm" onClick={() => removeEducation(edu.id)}>
-              <Trash2 className="h-4 w-4 text-red-500" />
-            </Button>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <Label>Institución</Label>
-              <Input
-                value={edu.institution}
-                onChange={(e) => updateEduItem(edu.id, { institution: e.target.value })}
-                placeholder="Universidad / Instituto"
-              />
+      <AnimatePresence mode="popLayout">
+        {cvData.education.map((edu, idx) => (
+          <motion.div
+            key={edu.id}
+            layout
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="border rounded-xl p-4 space-y-3 bg-muted/30"
+          >
+            <div className="flex justify-between items-center">
+              <span className="text-sm font-medium text-muted-foreground">Educación {idx + 1}</span>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => removeEducation(edu.id)}
+                className="h-8 w-8 p-0 hover:bg-destructive/10 hover:text-destructive"
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
             </div>
-            <div>
-              <Label>Título / Carrera</Label>
-              <Input
-                value={edu.area}
-                onChange={(e) => updateEduItem(edu.id, { area: e.target.value })}
-                placeholder="Ingeniería en..."
-              />
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label className="text-xs font-medium">Institución</Label>
+                <Input
+                  value={edu.institution}
+                  onChange={(e) => updateEduItem(edu.id, { institution: e.target.value })}
+                  placeholder="Universidad / Instituto"
+                  className="mt-1 h-9"
+                />
+              </div>
+              <div>
+                <Label className="text-xs font-medium">Título / Carrera</Label>
+                <Input
+                  value={edu.area}
+                  onChange={(e) => updateEduItem(edu.id, { area: e.target.value })}
+                  placeholder="Ingeniería en..."
+                  className="mt-1 h-9"
+                />
+              </div>
             </div>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <Label>Tipo</Label>
-              <Select value={edu.studyType} onValueChange={(v) => updateEduItem(edu.id, { studyType: v })}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Seleccionar" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Universidad">Universidad</SelectItem>
-                  <SelectItem value="Instituto">Instituto</SelectItem>
-                  <SelectItem value="Bootcamp">Bootcamp</SelectItem>
-                  <SelectItem value="Certificación">Certificación</SelectItem>
-                  <SelectItem value="Otro">Otro</SelectItem>
-                </SelectContent>
-              </Select>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label className="text-xs font-medium">Tipo</Label>
+                <Select value={edu.studyType} onValueChange={(v) => updateEduItem(edu.id, { studyType: v })}>
+                  <SelectTrigger className="mt-1 h-9">
+                    <SelectValue placeholder="Seleccionar" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Universidad">Universidad</SelectItem>
+                    <SelectItem value="Instituto">Instituto</SelectItem>
+                    <SelectItem value="Bootcamp">Bootcamp</SelectItem>
+                    <SelectItem value="Certificación">Certificación</SelectItem>
+                    <SelectItem value="Otro">Otro</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label className="text-xs font-medium">Fecha Término</Label>
+                <Input
+                  type="month"
+                  value={edu.endDate}
+                  onChange={(e) => updateEduItem(edu.id, { endDate: e.target.value })}
+                  className="mt-1 h-9"
+                />
+              </div>
             </div>
-            <div>
-              <Label>Fecha Término</Label>
-              <Input
-                type="month"
-                value={edu.endDate}
-                onChange={(e) => updateEduItem(edu.id, { endDate: e.target.value })}
-              />
-            </div>
-          </div>
-        </div>
-      ))}
-      <Button variant="outline" onClick={addNewEducation} className="w-full">
+          </motion.div>
+        ))}
+      </AnimatePresence>
+      <Button variant="outline" onClick={addNewEducation} className="w-full h-9 border-dashed">
         <Plus className="h-4 w-4 mr-2" /> Agregar Educación
       </Button>
     </CollapsibleSection>
@@ -404,34 +470,50 @@ function SkillsForm() {
 
   return (
     <CollapsibleSection id="skills" title="Habilidades" icon={SECTION_ICONS.skills}>
-      {cvData.skills.map((skill, idx) => (
-        <div key={skill.id} className="border rounded-lg p-4 space-y-3 bg-slate-50">
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-slate-500">Habilidad {idx + 1}</span>
-            <Button variant="ghost" size="sm" onClick={() => removeSkill(skill.id)}>
-              <Trash2 className="h-4 w-4 text-red-500" />
-            </Button>
-          </div>
-          <div>
-            <Label>Nombre</Label>
-            <Input
-              value={skill.name}
-              onChange={(e) => updateSkillItem(skill.id, { name: e.target.value })}
-              placeholder="JavaScript, React, etc."
-            />
-          </div>
-          <div>
-            <Label>Nivel: {skill.level}%</Label>
-            <Slider
-              value={[skill.level]}
-              onValueChange={([v]) => updateSkillItem(skill.id, { level: v })}
-              max={100}
-              step={5}
-            />
-          </div>
-        </div>
-      ))}
-      <Button variant="outline" onClick={addNewSkill} className="w-full">
+      <AnimatePresence mode="popLayout">
+        {cvData.skills.map((skill, idx) => (
+          <motion.div
+            key={skill.id}
+            layout
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="border rounded-xl p-4 space-y-3 bg-muted/30"
+          >
+            <div className="flex justify-between items-center">
+              <span className="text-sm font-medium text-muted-foreground">Habilidad {idx + 1}</span>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => removeSkill(skill.id)}
+                className="h-8 w-8 p-0 hover:bg-destructive/10 hover:text-destructive"
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </div>
+            <div>
+              <Label className="text-xs font-medium">Nombre</Label>
+              <Input
+                value={skill.name}
+                onChange={(e) => updateSkillItem(skill.id, { name: e.target.value })}
+                placeholder="JavaScript, React, etc."
+                className="mt-1 h-9"
+              />
+            </div>
+            <div>
+              <Label className="text-xs font-medium">Nivel: {skill.level}%</Label>
+              <Slider
+                value={[skill.level]}
+                onValueChange={([v]) => updateSkillItem(skill.id, { level: v })}
+                max={100}
+                step={5}
+                className="mt-2"
+              />
+            </div>
+          </motion.div>
+        ))}
+      </AnimatePresence>
+      <Button variant="outline" onClick={addNewSkill} className="w-full h-9 border-dashed">
         <Plus className="h-4 w-4 mr-2" /> Agregar Habilidad
       </Button>
     </CollapsibleSection>
@@ -464,36 +546,51 @@ function LanguagesForm() {
 
   return (
     <CollapsibleSection id="languages" title="Idiomas" icon={SECTION_ICONS.languages}>
-      {cvData.languages.map((lang, idx) => (
-        <div key={lang.id} className="flex gap-3 items-end">
-          <div className="flex-1">
-            <Label>{idx === 0 ? 'Idioma' : ''}</Label>
-            <Input
-              value={lang.language}
-              onChange={(e) => updateLangItem(lang.id, { language: e.target.value })}
-              placeholder="Inglés, Español, etc."
-            />
-          </div>
-          <div className="w-40">
-            <Label>{idx === 0 ? 'Nivel' : ''}</Label>
-            <Select value={lang.fluency} onValueChange={(v) => updateLangItem(lang.id, { fluency: v })}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Native">Nativo</SelectItem>
-                <SelectItem value="Fluent">Fluido</SelectItem>
-                <SelectItem value="Intermediate">Intermedio</SelectItem>
-                <SelectItem value="Basic">Básico</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <Button variant="ghost" size="sm" onClick={() => removeLanguage(lang.id)}>
-            <Trash2 className="h-4 w-4 text-red-500" />
-          </Button>
-        </div>
-      ))}
-      <Button variant="outline" onClick={addNewLanguage} className="w-full">
+      <AnimatePresence mode="popLayout">
+        {cvData.languages.map((lang, idx) => (
+          <motion.div
+            key={lang.id}
+            layout
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 10 }}
+            className="flex gap-3 items-end"
+          >
+            <div className="flex-1">
+              <Label className="text-xs font-medium">{idx === 0 ? 'Idioma' : ''}</Label>
+              <Input
+                value={lang.language}
+                onChange={(e) => updateLangItem(lang.id, { language: e.target.value })}
+                placeholder="Inglés, Español, etc."
+                className="mt-1 h-9"
+              />
+            </div>
+            <div className="w-36">
+              <Label className="text-xs font-medium">{idx === 0 ? 'Nivel' : ''}</Label>
+              <Select value={lang.fluency} onValueChange={(v) => updateLangItem(lang.id, { fluency: v })}>
+                <SelectTrigger className="mt-1 h-9">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Native">Nativo</SelectItem>
+                  <SelectItem value="Fluent">Fluido</SelectItem>
+                  <SelectItem value="Intermediate">Intermedio</SelectItem>
+                  <SelectItem value="Basic">Básico</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => removeLanguage(lang.id)}
+              className="h-9 w-9 p-0 hover:bg-destructive/10 hover:text-destructive"
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </motion.div>
+        ))}
+      </AnimatePresence>
+      <Button variant="outline" onClick={addNewLanguage} className="w-full h-9 border-dashed">
         <Plus className="h-4 w-4 mr-2" /> Agregar Idioma
       </Button>
     </CollapsibleSection>
@@ -528,43 +625,60 @@ function CertificatesForm() {
 
   return (
     <CollapsibleSection id="certificates" title="Certificaciones" icon={SECTION_ICONS.certificates}>
-      {cvData.certificates.map((cert, idx) => (
-        <div key={cert.id} className="border rounded-lg p-4 space-y-3 bg-slate-50">
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-slate-500">Certificación {idx + 1}</span>
-            <Button variant="ghost" size="sm" onClick={() => removeCert(cert.id)}>
-              <Trash2 className="h-4 w-4 text-red-500" />
-            </Button>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <Label>Nombre</Label>
-              <Input
-                value={cert.name}
-                onChange={(e) => updateCertItem(cert.id, { name: e.target.value })}
-                placeholder="AWS Certified..."
-              />
+      <AnimatePresence mode="popLayout">
+        {cvData.certificates.map((cert, idx) => (
+          <motion.div
+            key={cert.id}
+            layout
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="border rounded-xl p-4 space-y-3 bg-muted/30"
+          >
+            <div className="flex justify-between items-center">
+              <span className="text-sm font-medium text-muted-foreground">Certificación {idx + 1}</span>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => removeCert(cert.id)}
+                className="h-8 w-8 p-0 hover:bg-destructive/10 hover:text-destructive"
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label className="text-xs font-medium">Nombre</Label>
+                <Input
+                  value={cert.name}
+                  onChange={(e) => updateCertItem(cert.id, { name: e.target.value })}
+                  placeholder="AWS Certified..."
+                  className="mt-1 h-9"
+                />
+              </div>
+              <div>
+                <Label className="text-xs font-medium">Institución</Label>
+                <Input
+                  value={cert.issuer}
+                  onChange={(e) => updateCertItem(cert.id, { issuer: e.target.value })}
+                  placeholder="Amazon, Google, etc."
+                  className="mt-1 h-9"
+                />
+              </div>
             </div>
             <div>
-              <Label>Institución</Label>
+              <Label className="text-xs font-medium">Fecha</Label>
               <Input
-                value={cert.issuer}
-                onChange={(e) => updateCertItem(cert.id, { issuer: e.target.value })}
-                placeholder="Amazon, Google, etc."
+                type="month"
+                value={cert.date}
+                onChange={(e) => updateCertItem(cert.id, { date: e.target.value })}
+                className="mt-1 h-9"
               />
             </div>
-          </div>
-          <div>
-            <Label>Fecha</Label>
-            <Input
-              type="month"
-              value={cert.date}
-              onChange={(e) => updateCertItem(cert.id, { date: e.target.value })}
-            />
-          </div>
-        </div>
-      ))}
-      <Button variant="outline" onClick={addNewCert} className="w-full">
+          </motion.div>
+        ))}
+      </AnimatePresence>
+      <Button variant="outline" onClick={addNewCert} className="w-full h-9 border-dashed">
         <Plus className="h-4 w-4 mr-2" /> Agregar Certificación
       </Button>
     </CollapsibleSection>
@@ -576,15 +690,20 @@ export function CVEditor() {
   const { undo, redo, canUndo, canRedo } = useCVStore();
 
   return (
-    <div className="h-full overflow-y-auto p-4 bg-slate-100">
+    <div className="h-full overflow-y-auto p-4 bg-muted/30">
       {/* Undo/Redo buttons */}
-      <div className="flex gap-2 mb-4">
+      <motion.div 
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex gap-2 mb-4"
+      >
         <Button 
           variant="outline" 
           size="sm" 
           onClick={undo} 
           disabled={!canUndo()}
           title="Deshacer (Ctrl+Z)"
+          className="h-8"
         >
           <Undo2 className="h-4 w-4" />
         </Button>
@@ -594,10 +713,11 @@ export function CVEditor() {
           onClick={redo} 
           disabled={!canRedo()}
           title="Rehacer (Ctrl+Y)"
+          className="h-8"
         >
           <Redo2 className="h-4 w-4" />
         </Button>
-      </div>
+      </motion.div>
       
       <PersonalInfoForm />
       <WorkForm />

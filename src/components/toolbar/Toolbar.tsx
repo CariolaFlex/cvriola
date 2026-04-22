@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
@@ -8,11 +9,13 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Label } from '@/components/ui/label';
 import { 
   Palette, Type, FileText, Download, Image, Code, 
-  Settings, Check, Monitor, Undo2, Redo2, Save
+  Monitor, Undo2, Redo2, Save, Check, Loader2
 } from 'lucide-react';
 import { useCVStore } from '@/lib/store/cvStore';
 import { COLOR_PALETTES, HEADING_FONTS, BODY_FONTS, TEMPLATE_DEFINITIONS, PAGE_SIZES } from '@/lib/constants/cv-constants';
+import { ThemeToggle } from '@/components/theme/ThemeToggle';
 import type { ColorPalette } from '@/types/cv';
+import { toast } from 'sonner';
 
 interface ToolbarProps {
   onExportPDF: () => void;
@@ -41,38 +44,56 @@ export function Toolbar({ onExportPDF, onExportPNG, onExportJPG, onExportHTML, i
       textColor: palette.text,
       mutedColor: palette.muted,
     });
+    toast.success(`Paleta "${palette.name}" aplicada`);
+  };
+
+  const handleSave = () => {
+    saveCV();
+    toast.success('CV guardado correctamente');
   };
 
   return (
-    <div className="bg-white border-b shadow-sm px-4 py-2">
+    <motion.div 
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="bg-background/95 backdrop-blur-md border-b shadow-sm px-4 py-2.5 sticky top-0 z-50"
+    >
       <div className="flex items-center justify-between">
         {/* Left side - Template and Colors */}
         <div className="flex items-center gap-2">
           {/* Template Selector */}
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline" size="sm" className="gap-2">
+              <Button variant="outline" size="sm" className="gap-2 h-9">
                 <FileText className="h-4 w-4" />
-                Plantilla
+                <span className="hidden sm:inline">Plantilla</span>
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-80">
+            <PopoverContent className="w-80 p-3" align="start">
               <div className="space-y-3">
                 <h4 className="font-medium text-sm">Seleccionar Plantilla</h4>
                 <div className="grid grid-cols-2 gap-2">
                   {TEMPLATE_DEFINITIONS.map((template) => (
-                    <button
+                    <motion.button
                       key={template.id}
-                      onClick={() => setTemplate(template.id)}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => {
+                        setTemplate(template.id);
+                        toast.success(`Plantilla "${template.name}" seleccionada`);
+                      }}
                       className={`p-3 rounded-lg border text-left transition-all ${
                         cvData.meta.templateId === template.id
                           ? 'border-primary bg-primary/5 ring-1 ring-primary'
-                          : 'hover:border-slate-300'
+                          : 'hover:border-muted-foreground/30'
                       }`}
                     >
                       <div className="font-medium text-sm">{template.name}</div>
-                      <div className="text-xs text-slate-500 mt-1">{template.category}</div>
-                    </button>
+                      <div className="text-xs text-muted-foreground mt-1 capitalize">{template.category}</div>
+                      {cvData.meta.templateId === template.id && (
+                        <Check className="h-3 w-3 text-primary absolute top-2 right-2" />
+                      )}
+                    </motion.button>
                   ))}
                 </div>
               </div>
@@ -82,32 +103,37 @@ export function Toolbar({ onExportPDF, onExportPNG, onExportJPG, onExportHTML, i
           {/* Color Palette Selector */}
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline" size="sm" className="gap-2">
+              <Button variant="outline" size="sm" className="gap-2 h-9">
                 <Palette className="h-4 w-4" />
-                Colores
+                <span className="hidden sm:inline">Colores</span>
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-80">
+            <PopoverContent className="w-80 p-3" align="start">
               <div className="space-y-3">
                 <h4 className="font-medium text-sm">Paleta de Colores</h4>
                 <div className="grid grid-cols-2 gap-2">
                   {COLOR_PALETTES.map((palette) => (
-                    <button
+                    <motion.button
                       key={palette.id}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                       onClick={() => applyPalette(palette)}
-                      className={`p-2 rounded-lg border transition-all ${
+                      className={`relative p-2 rounded-lg border transition-all ${
                         currentTheme.primaryColor === palette.primary
-                          ? 'ring-2 ring-primary'
-                          : 'hover:border-slate-300'
+                          ? 'ring-2 ring-primary ring-offset-2'
+                          : 'hover:border-muted-foreground/30'
                       }`}
                     >
                       <div className="flex gap-1 mb-2">
-                        <div className="w-5 h-5 rounded" style={{ backgroundColor: palette.primary }} />
-                        <div className="w-5 h-5 rounded" style={{ backgroundColor: palette.secondary }} />
-                        <div className="w-5 h-5 rounded" style={{ backgroundColor: palette.accent }} />
+                        <div className="w-5 h-5 rounded shadow-sm" style={{ backgroundColor: palette.primary }} />
+                        <div className="w-5 h-5 rounded shadow-sm" style={{ backgroundColor: palette.secondary }} />
+                        <div className="w-5 h-5 rounded shadow-sm" style={{ backgroundColor: palette.accent }} />
                       </div>
-                      <div className="text-xs text-left">{palette.name}</div>
-                    </button>
+                      <div className="text-xs text-left font-medium">{palette.name}</div>
+                      {currentTheme.primaryColor === palette.primary && (
+                        <Check className="h-3 w-3 text-primary absolute top-2 right-2" />
+                      )}
+                    </motion.button>
                   ))}
                 </div>
               </div>
@@ -117,20 +143,20 @@ export function Toolbar({ onExportPDF, onExportPNG, onExportJPG, onExportHTML, i
           {/* Typography Selector */}
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline" size="sm" className="gap-2">
+              <Button variant="outline" size="sm" className="gap-2 h-9">
                 <Type className="h-4 w-4" />
-                Tipografía
+                <span className="hidden sm:inline">Tipografía</span>
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-80">
+            <PopoverContent className="w-80 p-4" align="start">
               <div className="space-y-4">
                 <div>
-                  <Label className="text-sm">Fuente Títulos</Label>
+                  <Label className="text-sm font-medium">Fuente Títulos</Label>
                   <Select 
                     value={currentTypography.headingFont} 
                     onValueChange={(v) => updateTypography({ headingFont: v })}
                   >
-                    <SelectTrigger className="mt-1">
+                    <SelectTrigger className="mt-1.5">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -141,12 +167,12 @@ export function Toolbar({ onExportPDF, onExportPNG, onExportJPG, onExportHTML, i
                   </Select>
                 </div>
                 <div>
-                  <Label className="text-sm">Fuente Cuerpo</Label>
+                  <Label className="text-sm font-medium">Fuente Cuerpo</Label>
                   <Select 
                     value={currentTypography.bodyFont} 
                     onValueChange={(v) => updateTypography({ bodyFont: v })}
                   >
-                    <SelectTrigger className="mt-1">
+                    <SelectTrigger className="mt-1.5">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -157,25 +183,25 @@ export function Toolbar({ onExportPDF, onExportPNG, onExportJPG, onExportHTML, i
                   </Select>
                 </div>
                 <div>
-                  <Label className="text-sm">Tamaño Títulos: {currentTypography.headingSize}pt</Label>
+                  <Label className="text-sm font-medium">Tamaño Títulos: {currentTypography.headingSize}pt</Label>
                   <Slider
                     value={[currentTypography.headingSize]}
                     onValueChange={([v]) => updateTypography({ headingSize: v })}
                     min={10}
                     max={20}
                     step={1}
-                    className="mt-1"
+                    className="mt-2"
                   />
                 </div>
                 <div>
-                  <Label className="text-sm">Tamaño Cuerpo: {currentTypography.bodySize}pt</Label>
+                  <Label className="text-sm font-medium">Tamaño Cuerpo: {currentTypography.bodySize}pt</Label>
                   <Slider
                     value={[currentTypography.bodySize]}
                     onValueChange={([v]) => updateTypography({ bodySize: v })}
                     min={8}
                     max={14}
                     step={1}
-                    className="mt-1"
+                    className="mt-2"
                   />
                 </div>
               </div>
@@ -185,20 +211,20 @@ export function Toolbar({ onExportPDF, onExportPNG, onExportJPG, onExportHTML, i
           {/* Page Settings */}
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline" size="sm" className="gap-2">
+              <Button variant="outline" size="sm" className="gap-2 h-9">
                 <Monitor className="h-4 w-4" />
-                Página
+                <span className="hidden sm:inline">Página</span>
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-64">
+            <PopoverContent className="w-64 p-4" align="start">
               <div className="space-y-4">
                 <div>
-                  <Label className="text-sm">Tamaño de Página</Label>
+                  <Label className="text-sm font-medium">Tamaño de Página</Label>
                   <Select 
                     value={currentLayout.pageSize} 
                     onValueChange={(v) => updateLayout({ pageSize: v as 'A4' | 'Letter' | 'Legal' })}
                   >
-                    <SelectTrigger className="mt-1">
+                    <SelectTrigger className="mt-1.5">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -209,12 +235,12 @@ export function Toolbar({ onExportPDF, onExportPNG, onExportJPG, onExportHTML, i
                   </Select>
                 </div>
                 <div>
-                  <Label className="text-sm">Orientación</Label>
+                  <Label className="text-sm font-medium">Orientación</Label>
                   <Select 
                     value={currentLayout.orientation} 
                     onValueChange={(v) => updateLayout({ orientation: v as 'portrait' | 'landscape' })}
                   >
-                    <SelectTrigger className="mt-1">
+                    <SelectTrigger className="mt-1.5">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -229,17 +255,41 @@ export function Toolbar({ onExportPDF, onExportPNG, onExportJPG, onExportHTML, i
         </div>
 
         {/* Right side - Undo/Redo and Export */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           {/* Undo/Redo */}
-          <Button variant="ghost" size="sm" onClick={undo} disabled={!canUndo()}>
-            <Undo2 className="h-4 w-4" />
-          </Button>
-          <Button variant="ghost" size="sm" onClick={redo} disabled={!canRedo()}>
-            <Redo2 className="h-4 w-4" />
-          </Button>
+          <div className="flex items-center border-r pr-2 mr-1">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={undo} 
+              disabled={!canUndo()}
+              className="h-8 w-8 p-0"
+              title="Deshacer (Ctrl+Z)"
+            >
+              <Undo2 className="h-4 w-4" />
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={redo} 
+              disabled={!canRedo()}
+              className="h-8 w-8 p-0"
+              title="Rehacer (Ctrl+Y)"
+            >
+              <Redo2 className="h-4 w-4" />
+            </Button>
+          </div>
+
+          {/* Theme Toggle */}
+          <ThemeToggle />
 
           {/* Save */}
-          <Button variant="ghost" size="sm" onClick={saveCV} className="gap-1">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={handleSave} 
+            className="gap-2 h-8"
+          >
             <Save className="h-4 w-4" />
             <span className="hidden sm:inline">Guardar</span>
           </Button>
@@ -247,46 +297,74 @@ export function Toolbar({ onExportPDF, onExportPNG, onExportJPG, onExportHTML, i
           {/* Export Dropdown */}
           <Popover open={showExportMenu} onOpenChange={setShowExportMenu}>
             <PopoverTrigger asChild>
-              <Button className="gap-2" disabled={isExporting}>
-                <Download className="h-4 w-4" />
-                {isExporting ? 'Exportando...' : 'Exportar'}
+              <Button className="gap-2 h-9 shadow-lg shadow-primary/20" disabled={isExporting}>
+                {isExporting ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Download className="h-4 w-4" />
+                )}
+                <span className="hidden sm:inline">{isExporting ? 'Exportando...' : 'Exportar'}</span>
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-48">
+            <PopoverContent className="w-52 p-2" align="end">
               <div className="space-y-1">
-                <button
+                <motion.button
+                  whileHover={{ x: 2 }}
                   onClick={() => { onExportPDF(); setShowExportMenu(false); }}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-sm rounded hover:bg-slate-100"
+                  className="w-full flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg hover:bg-muted transition-colors"
                 >
-                  <FileText className="h-4 w-4 text-red-500" />
-                  PDF Vectorial
-                </button>
-                <button
+                  <div className="h-8 w-8 rounded-lg bg-red-500/10 flex items-center justify-center">
+                    <FileText className="h-4 w-4 text-red-500" />
+                  </div>
+                  <div className="text-left">
+                    <div className="font-medium">PDF Vectorial</div>
+                    <div className="text-xs text-muted-foreground">Alta calidad</div>
+                  </div>
+                </motion.button>
+                <motion.button
+                  whileHover={{ x: 2 }}
                   onClick={() => { onExportPNG(); setShowExportMenu(false); }}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-sm rounded hover:bg-slate-100"
+                  className="w-full flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg hover:bg-muted transition-colors"
                 >
-                  <Image className="h-4 w-4 text-blue-500" />
-                  PNG Alta Res.
-                </button>
-                <button
+                  <div className="h-8 w-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                    <Image className="h-4 w-4 text-blue-500" />
+                  </div>
+                  <div className="text-left">
+                    <div className="font-medium">PNG Alta Res.</div>
+                    <div className="text-xs text-muted-foreground">Transparencia</div>
+                  </div>
+                </motion.button>
+                <motion.button
+                  whileHover={{ x: 2 }}
                   onClick={() => { onExportJPG(); setShowExportMenu(false); }}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-sm rounded hover:bg-slate-100"
+                  className="w-full flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg hover:bg-muted transition-colors"
                 >
-                  <Image className="h-4 w-4 text-green-500" />
-                  JPG Optimizado
-                </button>
-                <button
+                  <div className="h-8 w-8 rounded-lg bg-green-500/10 flex items-center justify-center">
+                    <Image className="h-4 w-4 text-green-500" />
+                  </div>
+                  <div className="text-left">
+                    <div className="font-medium">JPG Optimizado</div>
+                    <div className="text-xs text-muted-foreground">Menor tamaño</div>
+                  </div>
+                </motion.button>
+                <motion.button
+                  whileHover={{ x: 2 }}
                   onClick={() => { onExportHTML(); setShowExportMenu(false); }}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-sm rounded hover:bg-slate-100"
+                  className="w-full flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg hover:bg-muted transition-colors"
                 >
-                  <Code className="h-4 w-4 text-purple-500" />
-                  HTML Código
-                </button>
+                  <div className="h-8 w-8 rounded-lg bg-purple-500/10 flex items-center justify-center">
+                    <Code className="h-4 w-4 text-purple-500" />
+                  </div>
+                  <div className="text-left">
+                    <div className="font-medium">HTML Código</div>
+                    <div className="text-xs text-muted-foreground">Editable</div>
+                  </div>
+                </motion.button>
               </div>
             </PopoverContent>
           </Popover>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
