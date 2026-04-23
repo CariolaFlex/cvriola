@@ -7,9 +7,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Slider } from '@/components/ui/slider';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Label } from '@/components/ui/label';
-import { 
-  Palette, Type, FileText, Download, Image, Code, 
-  Monitor, Undo2, Redo2, Save, Check, Loader2
+import {
+  Palette, Type, FileText, Download, Image, Code,
+  Monitor, Undo2, Redo2, Save, Check, Loader2, FileJson, Upload
 } from 'lucide-react';
 import { useCVStore } from '@/lib/store/cvStore';
 import { COLOR_PALETTES, HEADING_FONTS, BODY_FONTS, TEMPLATE_DEFINITIONS, PAGE_SIZES } from '@/lib/constants/cv-constants';
@@ -26,8 +26,40 @@ interface ToolbarProps {
 }
 
 export function Toolbar({ onExportPDF, onExportPNG, onExportJPG, onExportHTML, isExporting }: ToolbarProps) {
-  const { cvData, setTemplate, updateTheme, updateTypography, updateLayout, undo, redo, canUndo, canRedo, saveCV } = useCVStore();
+  const { cvData, setTemplate, updateTheme, updateTypography, updateLayout, undo, redo, canUndo, canRedo, saveCV, exportJSON, importJSON } = useCVStore();
   const [showExportMenu, setShowExportMenu] = useState(false);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  const handleExportJSON = () => {
+    const json = exportJSON();
+    if (!json) return;
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${cvData?.name || 'cv'}-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toast.success('CV exportado como JSON');
+  };
+
+  const handleImportJSON = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const text = ev.target?.result as string;
+      if (importJSON(text)) {
+        toast.success('CV importado correctamente');
+      } else {
+        toast.error('JSON inválido. Revisa el archivo.');
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  };
 
   if (!cvData) return null;
 
@@ -360,7 +392,41 @@ export function Toolbar({ onExportPDF, onExportPNG, onExportJPG, onExportHTML, i
                     <div className="text-xs text-muted-foreground">Editable</div>
                   </div>
                 </motion.button>
+                <div className="h-px bg-border my-1" />
+                <motion.button
+                  whileHover={{ x: 2 }}
+                  onClick={() => { handleExportJSON(); setShowExportMenu(false); }}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg hover:bg-muted transition-colors"
+                >
+                  <div className="h-8 w-8 rounded-lg bg-amber-500/10 flex items-center justify-center">
+                    <FileJson className="h-4 w-4 text-amber-500" />
+                  </div>
+                  <div className="text-left">
+                    <div className="font-medium">JSON Backup</div>
+                    <div className="text-xs text-muted-foreground">Portable</div>
+                  </div>
+                </motion.button>
+                <motion.button
+                  whileHover={{ x: 2 }}
+                  onClick={() => { fileInputRef.current?.click(); setShowExportMenu(false); }}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg hover:bg-muted transition-colors"
+                >
+                  <div className="h-8 w-8 rounded-lg bg-cyan-500/10 flex items-center justify-center">
+                    <Upload className="h-4 w-4 text-cyan-500" />
+                  </div>
+                  <div className="text-left">
+                    <div className="font-medium">Importar JSON</div>
+                    <div className="text-xs text-muted-foreground">Reemplaza datos</div>
+                  </div>
+                </motion.button>
               </div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="application/json,.json"
+                className="hidden"
+                onChange={handleImportJSON}
+              />
             </PopoverContent>
           </Popover>
         </div>

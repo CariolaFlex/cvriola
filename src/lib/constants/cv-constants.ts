@@ -181,6 +181,51 @@ export const TEMPLATE_DEFINITIONS: TemplateDefinition[] = [
       mutedColor: '#6b7280',
     },
   },
+  {
+    id: 'executive',
+    name: 'Executive',
+    description: 'Lujo corporativo con foto destacada y tipografía editorial',
+    category: 'corporate',
+    features: ['Photo support', 'Editorial typography', 'Skill ratings'],
+    defaultTheme: {
+      primaryColor: '#1a1814',
+      secondaryColor: '#4a3f35',
+      accentColor: '#a67c3f',
+      backgroundColor: '#ffffff',
+      textColor: '#1a1814',
+      mutedColor: '#6b6a65',
+    },
+  },
+  {
+    id: 'timeline',
+    name: 'Timeline',
+    description: 'Header con gradiente vibrante, foto circular y línea de tiempo visual',
+    category: 'creative',
+    features: ['Photo support', 'Gradient header', 'Visual timeline'],
+    defaultTheme: {
+      primaryColor: '#4c1d95',
+      secondaryColor: '#7c3aed',
+      accentColor: '#f59e0b',
+      backgroundColor: '#ffffff',
+      textColor: '#1e1b4b',
+      mutedColor: '#6b7280',
+    },
+  },
+  {
+    id: 'infographic',
+    name: 'Infographic',
+    description: 'Diseño visual con foto, estadísticas, barras circulares y iconos',
+    category: 'creative',
+    features: ['Photo support', 'Skill rings', 'Stats & icons'],
+    defaultTheme: {
+      primaryColor: '#0f3638',
+      secondaryColor: '#4f98a3',
+      accentColor: '#01696f',
+      backgroundColor: '#ffffff',
+      textColor: '#1a1814',
+      mutedColor: '#6b6a65',
+    },
+  },
 ];
 
 // Section Configuration

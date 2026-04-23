@@ -13,7 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Plus, Edit, Copy, Trash2, FileText, Clock, Sparkles } from 'lucide-react';
+import { Plus, Edit, Copy, Trash2, FileText, Clock, Sparkles, Layout, Palette, Image as ImageIcon, Download, Zap, Award, Users, TrendingUp } from 'lucide-react';
 import { useCVStore } from '@/lib/store/cvStore';
 import { TEMPLATE_DEFINITIONS } from '@/lib/constants/cv-constants';
 import { TemplateThumbnails } from '@/components/templates/TemplateThumbnails';
@@ -90,10 +90,10 @@ export function Dashboard() {
 
       <div className="relative max-w-6xl mx-auto p-8">
         {/* Header */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center justify-between mb-10"
+          className="flex items-center justify-between mb-8"
         >
           <div className="flex items-center gap-3">
             <div className="relative">
@@ -114,7 +114,7 @@ export function Dashboard() {
             </div>
             <div>
               <h1 className="text-3xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-                CV Designer Pro
+                CVriola
               </h1>
               <p className="text-muted-foreground mt-0.5">Crea currículums profesionales en minutos</p>
             </div>
@@ -130,6 +130,83 @@ export function Dashboard() {
             </Button>
           </div>
         </motion.div>
+
+        {/* Hero + Stats */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-primary/10 p-8 mb-8"
+        >
+          <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-primary/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-1/2 -mb-32 w-96 h-64 bg-primary/5 rounded-full blur-3xl" />
+          <div className="relative grid md:grid-cols-5 gap-6 items-center">
+            <div className="md:col-span-3">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2 }}
+                className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-medium text-primary mb-4"
+              >
+                <Zap className="h-3.5 w-3.5" />
+                Nuevo · 8 plantillas premium con foto
+              </motion.div>
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-3">
+                Diseña un CV que{' '}
+                <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
+                  destaque
+                </span>
+              </h2>
+              <p className="text-muted-foreground text-lg max-w-xl">
+                Editor en tiempo real, plantillas profesionales, exportación PDF y soporte para fotos.
+                Todo local. Todo tuyo.
+              </p>
+              <div className="flex flex-wrap gap-2 mt-5">
+                <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-card border border-border"><ImageIcon className="h-3 w-3"/> Fotos</span>
+                <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-card border border-border"><Palette className="h-3 w-3"/> Temas</span>
+                <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-card border border-border"><Download className="h-3 w-3"/> PDF</span>
+                <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-card border border-border"><Layout className="h-3 w-3"/> Drag & drop</span>
+              </div>
+            </div>
+            <div className="md:col-span-2 grid grid-cols-2 gap-3">
+              {[
+                { icon: FileText, label: 'Mis CVs', value: cvList.length, color: 'from-blue-500/20 to-cyan-500/20', iconColor: 'text-blue-500' },
+                { icon: Layout, label: 'Plantillas', value: TEMPLATE_DEFINITIONS.length, color: 'from-violet-500/20 to-fuchsia-500/20', iconColor: 'text-violet-500' },
+                { icon: Award, label: 'Premium', value: TEMPLATE_DEFINITIONS.filter(t => ['executive','timeline','infographic'].includes(t.id)).length, color: 'from-amber-500/20 to-orange-500/20', iconColor: 'text-amber-500' },
+                { icon: TrendingUp, label: 'ATS Ready', value: '100%', color: 'from-emerald-500/20 to-teal-500/20', iconColor: 'text-emerald-500' },
+              ].map((stat, i) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.3 + i * 0.08 }}
+                  whileHover={{ y: -4 }}
+                  className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${stat.color} border border-border/50 p-4 backdrop-blur-sm`}
+                >
+                  <stat.icon className={`h-5 w-5 ${stat.iconColor} mb-2`} />
+                  <div className="text-2xl font-bold">{stat.value}</div>
+                  <div className="text-xs text-muted-foreground">{stat.label}</div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Section heading */}
+        {cvList.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            className="flex items-center justify-between mb-5"
+          >
+            <div className="flex items-center gap-2">
+              <div className="h-6 w-1 rounded-full bg-primary" />
+              <h2 className="text-xl font-semibold">Tus currículums</h2>
+              <span className="text-sm text-muted-foreground">({cvList.length})</span>
+            </div>
+          </motion.div>
+        )}
 
         {/* CV Grid */}
         {cvList.length === 0 ? (
@@ -270,6 +347,44 @@ export function Dashboard() {
             </AnimatePresence>
           </motion.div>
         )}
+
+        {/* Features showcase */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-16"
+        >
+          <div className="flex items-center gap-2 mb-6">
+            <div className="h-6 w-1 rounded-full bg-primary" />
+            <h2 className="text-xl font-semibold">Todo lo que necesitas</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              { icon: Layout, title: '8 Plantillas', desc: 'Classic, Modern, Executive, Timeline, Infographic y más', color: 'text-blue-500', bg: 'bg-blue-500/10' },
+              { icon: ImageIcon, title: 'Fotos de perfil', desc: 'Sube tu foto y aparece en plantillas compatibles', color: 'text-violet-500', bg: 'bg-violet-500/10' },
+              { icon: Palette, title: 'Temas personalizables', desc: '8 paletas y 6 tipografías profesionales', color: 'text-amber-500', bg: 'bg-amber-500/10' },
+              { icon: Download, title: 'Export PDF', desc: 'A4, Letter y Legal · calidad de imprenta', color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
+            ].map((f, i) => (
+              <motion.div
+                key={f.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08 }}
+                whileHover={{ y: -4 }}
+                className="group relative overflow-hidden rounded-2xl bg-card/50 backdrop-blur-sm border border-border/50 p-5 hover:border-primary/40 transition-colors"
+              >
+                <div className={`inline-flex items-center justify-center h-10 w-10 rounded-xl ${f.bg} mb-3`}>
+                  <f.icon className={`h-5 w-5 ${f.color}`} />
+                </div>
+                <h3 className="font-semibold mb-1">{f.title}</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">{f.desc}</p>
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/0 to-primary/0 group-hover:from-primary/5 group-hover:to-transparent transition-all pointer-events-none" />
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
 
         {/* Template Selection Dialog */}
         <Dialog open={templateDialogOpen} onOpenChange={setTemplateDialogOpen}>

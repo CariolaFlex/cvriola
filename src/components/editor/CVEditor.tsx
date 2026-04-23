@@ -8,10 +8,11 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
-import { 
-  User, Briefcase, GraduationCap, Star, Award, Languages, 
+import {
+  User, Briefcase, GraduationCap, Star, Award, Languages,
   FolderKanban, Heart, Sparkles, Quote, Plus, Trash2,
-  ChevronDown, ChevronUp, GripVertical, Undo2, Redo2
+  ChevronDown, ChevronUp, GripVertical, Undo2, Redo2,
+  Camera, Upload, X
 } from 'lucide-react';
 import type { CVData, Work, Education, Skill, Certificate, Language } from '@/types/cv';
 import { useCVStore } from '@/lib/store/cvStore';
@@ -109,8 +110,84 @@ function PersonalInfoForm() {
   
   if (!cvData) return null;
 
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) {
+      alert('La imagen debe ser menor a 2MB');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      updateBasics({ image: reader.result as string });
+    };
+    reader.readAsDataURL(file);
+  };
+
   return (
     <CollapsibleSection id="basics" title="Información Personal" icon={SECTION_ICONS.basics} defaultOpen>
+      {/* Photo Upload */}
+      <div className="flex items-center gap-4 pb-2">
+        <motion.div
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
+          className="relative group"
+        >
+          <div
+            className="h-20 w-20 rounded-full overflow-hidden border-2 border-primary/20 bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center"
+            style={{
+              backgroundImage: cvData.basics.image ? `url(${cvData.basics.image})` : undefined,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
+          >
+            {!cvData.basics.image && <User className="h-8 w-8 text-primary/60" />}
+          </div>
+          <label
+            htmlFor="photo-upload"
+            className="absolute inset-0 rounded-full bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"
+          >
+            <Camera className="h-5 w-5 text-white" />
+          </label>
+          <input
+            id="photo-upload"
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handlePhotoUpload}
+          />
+        </motion.div>
+        <div className="flex-1 space-y-2">
+          <div className="flex gap-2">
+            <label
+              htmlFor="photo-upload-btn"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md border bg-background hover:bg-muted text-sm cursor-pointer transition-colors"
+            >
+              <Upload className="h-3.5 w-3.5" />
+              Subir foto
+              <input
+                id="photo-upload-btn"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handlePhotoUpload}
+              />
+            </label>
+            {cvData.basics.image && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => updateBasics({ image: '' })}
+                className="text-destructive hover:text-destructive h-8 px-2"
+              >
+                <X className="h-3.5 w-3.5" />
+              </Button>
+            )}
+          </div>
+          <p className="text-xs text-muted-foreground">JPG o PNG, máximo 2MB</p>
+        </div>
+      </div>
+
       <div className="grid grid-cols-2 gap-4">
         <div>
           <Label htmlFor="name" className="text-sm font-medium">Nombre Completo</Label>

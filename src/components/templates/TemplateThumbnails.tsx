@@ -178,4 +178,154 @@ export const TemplateThumbnails: Record<string, React.ReactNode> = {
       <rect x="60" y="154" width="45" height="3" fill="#f59e0b" rx="4"/>
     </svg>
   ),
+  executive: (
+    <svg viewBox="0 0 120 160" className="w-full h-full">
+      <rect width="120" height="160" fill="#ffffff" rx="4"/>
+      {/* Double border header */}
+      <rect x="8" y="8" width="104" height="44" fill="none" stroke="#1a1814" strokeWidth="1"/>
+      <rect x="11" y="11" width="98" height="38" fill="none" stroke="#a67c3f" strokeWidth="0.5"/>
+      {/* Photo square */}
+      <rect x="16" y="16" width="28" height="28" fill="#4a3f35" rx="1"/>
+      <rect x="18" y="18" width="24" height="24" fill="#a67c3f" rx="0.5"/>
+      {/* Name + tagline */}
+      <rect x="50" y="20" width="55" height="4" fill="#1a1814" rx="0.5"/>
+      <rect x="50" y="28" width="40" height="2.5" fill="#a67c3f" rx="0.5"/>
+      <rect x="50" y="34" width="48" height="2" fill="#6b6a65" rx="0.5"/>
+      <rect x="50" y="39" width="48" height="2" fill="#6b6a65" rx="0.5"/>
+      {/* Tagline */}
+      <text x="60" y="60" fill="#a67c3f" fontSize="3.5" fontStyle="italic" letterSpacing="1">CURRICULUM VITAE</text>
+      {/* Quote summary */}
+      <rect x="14" y="66" width="2" height="14" fill="#a67c3f"/>
+      <rect x="20" y="68" width="90" height="2" fill="#4a3f35" rx="0.5"/>
+      <rect x="20" y="73" width="85" height="2" fill="#4a3f35" rx="0.5"/>
+      <rect x="20" y="78" width="70" height="2" fill="#4a3f35" rx="0.5"/>
+      {/* Trajectory grid */}
+      <rect x="10" y="88" width="100" height="1" fill="#1a1814"/>
+      <rect x="10" y="92" width="20" height="2.5" fill="#a67c3f" rx="0.5"/>
+      <rect x="38" y="92" width="40" height="2.5" fill="#1a1814" rx="0.5"/>
+      <rect x="38" y="98" width="65" height="2" fill="#6b6a65" rx="0.5"/>
+      <rect x="10" y="106" width="20" height="2.5" fill="#a67c3f" rx="0.5"/>
+      <rect x="38" y="106" width="40" height="2.5" fill="#1a1814" rx="0.5"/>
+      <rect x="38" y="112" width="65" height="2" fill="#6b6a65" rx="0.5"/>
+      {/* Two columns */}
+      <rect x="10" y="124" width="100" height="1" fill="#1a1814"/>
+      <rect x="10" y="128" width="35" height="3" fill="#1a1814" rx="0.5"/>
+      <rect x="65" y="128" width="35" height="3" fill="#1a1814" rx="0.5"/>
+      {/* Skill dots */}
+      <rect x="10" y="136" width="30" height="2" fill="#4a3f35" rx="0.5"/>
+      <circle cx="10" cy="143" r="1.5" fill="#a67c3f"/>
+      <circle cx="15" cy="143" r="1.5" fill="#a67c3f"/>
+      <circle cx="20" cy="143" r="1.5" fill="#a67c3f"/>
+      <circle cx="25" cy="143" r="1.5" fill="#a67c3f"/>
+      <circle cx="30" cy="143" r="1.5" fill="#e5e5e5"/>
+      <rect x="10" y="150" width="30" height="2" fill="#4a3f35" rx="0.5"/>
+      <rect x="65" y="136" width="40" height="2" fill="#4a3f35" rx="0.5"/>
+      <rect x="65" y="142" width="40" height="2" fill="#4a3f35" rx="0.5"/>
+      <rect x="65" y="148" width="40" height="2" fill="#4a3f35" rx="0.5"/>
+    </svg>
+  ),
+  timeline: (
+    <svg viewBox="0 0 120 160" className="w-full h-full">
+      <defs>
+        <linearGradient id="timelineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#4c1d95"/>
+          <stop offset="50%" stopColor="#7c3aed"/>
+          <stop offset="100%" stopColor="#f59e0b"/>
+        </linearGradient>
+      </defs>
+      <rect width="120" height="160" fill="#ffffff" rx="4"/>
+      {/* Gradient hero */}
+      <rect x="0" y="0" width="120" height="52" fill="url(#timelineGrad)" rx="4"/>
+      {/* Circle photo */}
+      <circle cx="22" cy="26" r="14" fill="#ffffff"/>
+      <circle cx="22" cy="26" r="12" fill="#7c3aed"/>
+      {/* Name */}
+      <rect x="42" y="16" width="55" height="5" fill="#ffffff" rx="1"/>
+      <rect x="42" y="25" width="40" height="3" fill="rgba(255,255,255,0.85)" rx="0.5"/>
+      {/* Glass pills */}
+      <rect x="42" y="32" width="22" height="5" fill="rgba(255,255,255,0.25)" rx="2.5"/>
+      <rect x="66" y="32" width="22" height="5" fill="rgba(255,255,255,0.25)" rx="2.5"/>
+      <rect x="42" y="40" width="22" height="5" fill="rgba(255,255,255,0.25)" rx="2.5"/>
+      {/* Timeline line */}
+      <rect x="17" y="62" width="1.5" height="85" fill="#a78bfa"/>
+      {/* Timeline dots + cards */}
+      <circle cx="18" cy="68" r="3.5" fill="#7c3aed" stroke="#ffffff" strokeWidth="1.5"/>
+      <rect x="26" y="64" width="84" height="18" fill="#faf5ff" rx="2" stroke="#a78bfa" strokeWidth="0.5"/>
+      <rect x="30" y="68" width="40" height="3" fill="#4c1d95" rx="0.5"/>
+      <rect x="78" y="68" width="28" height="3" fill="#7c3aed" rx="1"/>
+      <rect x="30" y="74" width="70" height="5" fill="#e9d5ff" rx="1"/>
+      <circle cx="18" cy="92" r="3.5" fill="#7c3aed" stroke="#ffffff" strokeWidth="1.5"/>
+      <rect x="26" y="88" width="84" height="18" fill="#faf5ff" rx="2" stroke="#a78bfa" strokeWidth="0.5"/>
+      <rect x="30" y="92" width="40" height="3" fill="#4c1d95" rx="0.5"/>
+      <rect x="78" y="92" width="28" height="3" fill="#7c3aed" rx="1"/>
+      <rect x="30" y="98" width="70" height="5" fill="#e9d5ff" rx="1"/>
+      <circle cx="18" cy="116" r="3.5" fill="#7c3aed" stroke="#ffffff" strokeWidth="1.5"/>
+      <rect x="26" y="112" width="84" height="16" fill="#faf5ff" rx="2" stroke="#a78bfa" strokeWidth="0.5"/>
+      <rect x="30" y="116" width="40" height="3" fill="#4c1d95" rx="0.5"/>
+      <rect x="30" y="122" width="70" height="3" fill="#e9d5ff" rx="1"/>
+      {/* Skills gradient badges */}
+      <rect x="10" y="136" width="22" height="6" fill="url(#timelineGrad)" rx="3"/>
+      <rect x="36" y="136" width="18" height="6" fill="url(#timelineGrad)" rx="3"/>
+      <rect x="58" y="136" width="24" height="6" fill="url(#timelineGrad)" rx="3"/>
+      <rect x="86" y="136" width="20" height="6" fill="url(#timelineGrad)" rx="3"/>
+      <rect x="10" y="146" width="26" height="6" fill="url(#timelineGrad)" rx="3"/>
+      <rect x="40" y="146" width="20" height="6" fill="url(#timelineGrad)" rx="3"/>
+      <rect x="64" y="146" width="22" height="6" fill="url(#timelineGrad)" rx="3"/>
+    </svg>
+  ),
+  infographic: (
+    <svg viewBox="0 0 120 160" className="w-full h-full">
+      <rect width="120" height="160" fill="#ffffff" rx="4"/>
+      {/* Sidebar */}
+      <rect x="0" y="0" width="45" height="160" fill="#0f3638" rx="4"/>
+      <rect x="45" y="0" width="75" height="160" fill="#ffffff"/>
+      {/* Photo circle */}
+      <circle cx="22" cy="22" r="14" fill="#4f98a3" stroke="#ffffff" strokeWidth="2"/>
+      {/* Name */}
+      <rect x="5" y="42" width="35" height="3" fill="#ffffff" rx="0.5"/>
+      <rect x="8" y="48" width="28" height="2" fill="#4f98a3" rx="0.5"/>
+      {/* Stats */}
+      <rect x="5" y="56" width="15" height="12" fill="rgba(255,255,255,0.1)" rx="1"/>
+      <text x="12" y="64" fill="#4f98a3" fontSize="5" fontWeight="700" textAnchor="middle">5+</text>
+      <rect x="24" y="56" width="15" height="12" fill="rgba(255,255,255,0.1)" rx="1"/>
+      <text x="31" y="64" fill="#4f98a3" fontSize="5" fontWeight="700" textAnchor="middle">20</text>
+      {/* Skill rings */}
+      <circle cx="12" cy="84" r="6" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="2"/>
+      <circle cx="12" cy="84" r="6" fill="none" stroke="#4f98a3" strokeWidth="2" strokeDasharray="30 40" transform="rotate(-90 12 84)"/>
+      <circle cx="32" cy="84" r="6" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="2"/>
+      <circle cx="32" cy="84" r="6" fill="none" stroke="#01696f" strokeWidth="2" strokeDasharray="25 40" transform="rotate(-90 32 84)"/>
+      <circle cx="12" cy="104" r="6" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="2"/>
+      <circle cx="12" cy="104" r="6" fill="none" stroke="#4f98a3" strokeWidth="2" strokeDasharray="35 40" transform="rotate(-90 12 104)"/>
+      <circle cx="32" cy="104" r="6" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="2"/>
+      <circle cx="32" cy="104" r="6" fill="none" stroke="#01696f" strokeWidth="2" strokeDasharray="32 40" transform="rotate(-90 32 104)"/>
+      {/* Contact */}
+      <rect x="5" y="122" width="35" height="2" fill="rgba(255,255,255,0.5)" rx="0.5"/>
+      <rect x="5" y="128" width="35" height="2" fill="rgba(255,255,255,0.5)" rx="0.5"/>
+      <rect x="5" y="134" width="35" height="2" fill="rgba(255,255,255,0.5)" rx="0.5"/>
+      <rect x="5" y="140" width="35" height="2" fill="rgba(255,255,255,0.5)" rx="0.5"/>
+      {/* Main content */}
+      <circle cx="52" cy="14" r="3" fill="#01696f"/>
+      <text x="52" y="16" fill="#ffffff" fontSize="3.5" textAnchor="middle">💼</text>
+      <rect x="58" y="12" width="55" height="4" fill="#0f3638" rx="0.5"/>
+      <rect x="50" y="20" width="65" height="14" fill="#f0fdfa" rx="1" stroke="#4f98a3" strokeWidth="0.3"/>
+      <rect x="53" y="23" width="35" height="2.5" fill="#0f3638" rx="0.5"/>
+      <rect x="53" y="28" width="50" height="2" fill="#6b6a65" rx="0.5"/>
+      <rect x="50" y="38" width="65" height="14" fill="#f0fdfa" rx="1" stroke="#4f98a3" strokeWidth="0.3"/>
+      <rect x="53" y="41" width="35" height="2.5" fill="#0f3638" rx="0.5"/>
+      <rect x="53" y="46" width="50" height="2" fill="#6b6a65" rx="0.5"/>
+      <circle cx="52" cy="60" r="3" fill="#01696f"/>
+      <rect x="58" y="58" width="55" height="4" fill="#0f3638" rx="0.5"/>
+      <rect x="50" y="66" width="65" height="12" fill="#f0fdfa" rx="1"/>
+      <circle cx="52" cy="86" r="3" fill="#01696f"/>
+      <rect x="58" y="84" width="55" height="4" fill="#0f3638" rx="0.5"/>
+      <rect x="50" y="92" width="65" height="12" fill="#f0fdfa" rx="1"/>
+      <circle cx="52" cy="112" r="3" fill="#01696f"/>
+      <rect x="58" y="110" width="55" height="4" fill="#0f3638" rx="0.5"/>
+      <rect x="50" y="118" width="20" height="5" fill="#4f98a3" rx="2.5"/>
+      <rect x="72" y="118" width="16" height="5" fill="#4f98a3" rx="2.5"/>
+      <rect x="90" y="118" width="22" height="5" fill="#4f98a3" rx="2.5"/>
+      <rect x="50" y="126" width="24" height="5" fill="#4f98a3" rx="2.5"/>
+      <rect x="76" y="126" width="18" height="5" fill="#4f98a3" rx="2.5"/>
+    </svg>
+  ),
 };
