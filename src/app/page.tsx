@@ -96,44 +96,48 @@ export default function Home() {
     setIsExporting(true);
 
     try {
-      const baseHtml = generateHTML();
-      const fitHtml = baseHtml.replace(
-        '@media print {',
-        `@media print {
-      .cv-template { transform-origin: top left; }
-      body._fit_page .cv-template { transform: scale(var(--fit-scale, 1)); }`
-      );
-
+      const html = generateHTML();
       const printWindow = window.open('', '_blank');
-      if (!printWindow) return;
+      if (!printWindow) { setIsExporting(false); return; }
 
-      printWindow.document.write(fitHtml);
+      printWindow.document.write(html);
       printWindow.document.close();
 
-      setTimeout(() => {
-        const cvEl = printWindow.document.querySelector('.cv-template') as HTMLElement | null;
-        if (cvEl) {
-          const A4HeightPx = 297 * 3.7795275591;
-          const contentHeight = cvEl.scrollHeight;
-          if (contentHeight > A4HeightPx) {
-            const scale = A4HeightPx / contentHeight;
-            printWindow.document.documentElement.style.setProperty('--fit-scale', String(scale.toFixed(4)));
-            printWindow.document.body.classList.add('_fit_page');
-            const style = printWindow.document.createElement('style');
-            style.textContent = `@media print { body { margin: 0; } .cv-template { transform: scale(${scale.toFixed(4)}); transform-origin: top left; width: ${(100 / scale).toFixed(2)}%; } }`;
-            printWindow.document.head.appendChild(style);
-          }
-        }
-        printWindow.print();
-      }, 800);
+      const fitAndPrint = () => {
+        try {
+          const cvEl = printWindow.document.querySelector('.cv-template');
+          if (cvEl) {
+            // A4 height in CSS pixels at 96 DPI: 297mm × (96px/25.4mm) ≈ 1122px
+            const A4H = Math.round((297 / 25.4) * 96);
+            const contentH = cvEl.scrollHeight;
 
-      toast.success('PDF una página listo', {
-        description: 'El contenido se escaló para caber en una sola página'
+            if (contentH > A4H) {
+              const scale = (A4H / contentH).toFixed(4);
+              // zoom (unlike transform) changes layout flow → browser counts fewer pages
+              const s = printWindow.document.createElement('style');
+              s.textContent = `@media print { html { zoom: ${scale}; } @page { size: A4 portrait; margin: 0; } }`;
+              printWindow.document.head.appendChild(s);
+            }
+          }
+        } catch (_) {/* continue even on measurement error */}
+
+        printWindow.print();
+        setIsExporting(false);
+      };
+
+      // Wait for Google Fonts to finish loading before measuring
+      if (printWindow.document.fonts) {
+        printWindow.document.fonts.ready.then(() => setTimeout(fitAndPrint, 300));
+      } else {
+        setTimeout(fitAndPrint, 1500);
+      }
+
+      toast.success('Preparando PDF de una página...', {
+        description: 'El contenido se escalará automáticamente para caber en A4'
       });
     } catch (error) {
       console.error('Error exporting fit-page PDF:', error);
       toast.error('Error al exportar PDF una página');
-    } finally {
       setIsExporting(false);
     }
   };
