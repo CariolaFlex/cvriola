@@ -19,13 +19,14 @@ import { toast } from 'sonner';
 
 interface ToolbarProps {
   onExportPDF: () => void;
+  onExportFitPage: () => void;
   onExportPNG: () => void;
   onExportJPG: () => void;
   onExportHTML: () => void;
   isExporting: boolean;
 }
 
-export function Toolbar({ onExportPDF, onExportPNG, onExportJPG, onExportHTML, isExporting }: ToolbarProps) {
+export function Toolbar({ onExportPDF, onExportFitPage, onExportPNG, onExportJPG, onExportHTML, isExporting }: ToolbarProps) {
   const { cvData, setTemplate, updateTheme, updateTypography, updateLayout, undo, redo, canUndo, canRedo, saveCV, exportJSON, importJSON } = useCVStore();
   const [showExportMenu, setShowExportMenu] = useState(false);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
@@ -351,6 +352,19 @@ export function Toolbar({ onExportPDF, onExportPNG, onExportJPG, onExportHTML, i
                   <div className="text-left">
                     <div className="font-medium">PDF Vectorial</div>
                     <div className="text-xs text-muted-foreground">Alta calidad</div>
+                  </div>
+                </motion.button>
+                <motion.button
+                  whileHover={{ x: 2 }}
+                  onClick={() => { onExportFitPage(); setShowExportMenu(false); }}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg hover:bg-muted transition-colors"
+                >
+                  <div className="h-8 w-8 rounded-lg bg-red-500/10 flex items-center justify-center">
+                    <FileText className="h-4 w-4 text-red-500" />
+                  </div>
+                  <div className="text-left">
+                    <div className="font-medium">PDF - 1 Página</div>
+                    <div className="text-xs text-muted-foreground">Todo en una hoja</div>
                   </div>
                 </motion.button>
                 <motion.button

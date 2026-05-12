@@ -68,10 +68,10 @@ export default function Home() {
   const exportPDF = async () => {
     if (!cvData) return;
     setIsExporting(true);
-    
+
     try {
       const html = generateHTML();
-      
+
       const printWindow = window.open('', '_blank');
       if (printWindow) {
         printWindow.document.write(html);
@@ -86,6 +86,53 @@ export default function Home() {
     } catch (error) {
       console.error('Error exporting PDF:', error);
       toast.error('Error al exportar PDF');
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+  const exportFitPage = async () => {
+    if (!cvData) return;
+    setIsExporting(true);
+
+    try {
+      const baseHtml = generateHTML();
+      const fitHtml = baseHtml.replace(
+        '@media print {',
+        `@media print {
+      .cv-template { transform-origin: top left; }
+      body._fit_page .cv-template { transform: scale(var(--fit-scale, 1)); }`
+      );
+
+      const printWindow = window.open('', '_blank');
+      if (!printWindow) return;
+
+      printWindow.document.write(fitHtml);
+      printWindow.document.close();
+
+      setTimeout(() => {
+        const cvEl = printWindow.document.querySelector('.cv-template') as HTMLElement | null;
+        if (cvEl) {
+          const A4HeightPx = 297 * 3.7795275591;
+          const contentHeight = cvEl.scrollHeight;
+          if (contentHeight > A4HeightPx) {
+            const scale = A4HeightPx / contentHeight;
+            printWindow.document.documentElement.style.setProperty('--fit-scale', String(scale.toFixed(4)));
+            printWindow.document.body.classList.add('_fit_page');
+            const style = printWindow.document.createElement('style');
+            style.textContent = `@media print { body { margin: 0; } .cv-template { transform: scale(${scale.toFixed(4)}); transform-origin: top left; width: ${(100 / scale).toFixed(2)}%; } }`;
+            printWindow.document.head.appendChild(style);
+          }
+        }
+        printWindow.print();
+      }, 800);
+
+      toast.success('PDF una página listo', {
+        description: 'El contenido se escaló para caber en una sola página'
+      });
+    } catch (error) {
+      console.error('Error exporting fit-page PDF:', error);
+      toast.error('Error al exportar PDF una página');
     } finally {
       setIsExporting(false);
     }
@@ -187,6 +234,7 @@ export default function Home() {
       {/* Toolbar */}
       <Toolbar
         onExportPDF={exportPDF}
+        onExportFitPage={exportFitPage}
         onExportPNG={exportPNG}
         onExportJPG={exportJPG}
         onExportHTML={exportHTML}

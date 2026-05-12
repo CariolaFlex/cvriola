@@ -397,10 +397,49 @@ function WorkForm() {
               <Textarea
                 value={job.summary}
                 onChange={(e) => updateWorkItem(job.id, { summary: e.target.value })}
-                placeholder="Describe tus responsabilidades..."
-                rows={3}
-                className="mt-1 resize-none"
+                placeholder="Describe tus responsabilidades... (puedes usar Intro para nuevas líneas)"
+                rows={5}
+                className="mt-1 resize-y"
               />
+            </div>
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <Label className="text-xs font-medium">Puntos destacados (viñetas)</Label>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => updateWorkItem(job.id, { highlights: [...job.highlights, ''] })}
+                  className="h-6 px-2 text-xs"
+                >
+                  <Plus className="h-3 w-3 mr-1" /> Añadir
+                </Button>
+              </div>
+              {job.highlights.map((h, hIdx) => (
+                <div key={hIdx} className="flex gap-1 mb-1">
+                  <span className="text-muted-foreground text-xs mt-2">•</span>
+                  <input
+                    value={h}
+                    onChange={(e) => {
+                      const newHighlights = [...job.highlights];
+                      newHighlights[hIdx] = e.target.value;
+                      updateWorkItem(job.id, { highlights: newHighlights });
+                    }}
+                    placeholder="Punto destacado..."
+                    className="flex-1 h-8 px-2 text-xs border rounded-md bg-background"
+                  />
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      const newHighlights = job.highlights.filter((_, i) => i !== hIdx);
+                      updateWorkItem(job.id, { highlights: newHighlights });
+                    }}
+                    className="h-8 w-8 p-0 hover:bg-destructive/10 hover:text-destructive"
+                  >
+                    <Trash2 className="h-3 w-3" />
+                  </Button>
+                </div>
+              ))}
             </div>
           </motion.div>
         ))}

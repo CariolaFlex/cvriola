@@ -7,7 +7,8 @@ import type { CVData, ThemeConfig, TypographyConfig } from '@/types/cv';
 export function ClassicTemplate({ data, theme, typography }: { data: CVData; theme: ThemeConfig; typography: TypographyConfig }) {
   const formatDate = (date: string) => {
     if (!date) return '';
-    const d = new Date(date);
+    const [year, month] = date.split('-');
+    const d = new Date(parseInt(year), parseInt(month) - 1, 1);
     return d.toLocaleDateString('es-CL', { month: 'short', year: 'numeric' });
   };
 
@@ -61,7 +62,7 @@ export function ClassicTemplate({ data, theme, typography }: { data: CVData; the
           }}>
             Perfil Profesional
           </h2>
-          <p style={{ margin: 0, textAlign: 'justify' }}>{data.basics.summary}</p>
+          <p style={{ margin: 0, textAlign: 'justify', whiteSpace: 'pre-wrap' }}>{data.basics.summary}</p>
         </section>
       )}
 
@@ -89,7 +90,7 @@ export function ClassicTemplate({ data, theme, typography }: { data: CVData; the
               <p style={{ margin: '2pt 0', color: theme.secondaryColor, fontWeight: 500 }}>
                 {job.company}{job.location ? ` • ${job.location}` : ''}
               </p>
-              {job.summary && <p style={{ margin: '5pt 0', textAlign: 'justify' }}>{job.summary}</p>}
+              {job.summary && <p style={{ margin: '5pt 0', textAlign: 'justify', whiteSpace: 'pre-wrap' }}>{job.summary}</p>}
               {job.highlights.length > 0 && (
                 <ul style={{ margin: '5pt 0', paddingLeft: '15pt' }}>
                   {job.highlights.map((h, i) => <li key={i} style={{ marginBottom: '3pt' }}>{h}</li>)}
@@ -142,13 +143,14 @@ export function ClassicTemplate({ data, theme, typography }: { data: CVData; the
           }}>
             Habilidades
           </h2>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8pt' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6pt' }}>
             {data.skills.map((skill, idx) => (
               <span key={skill.id || idx} style={{
                 padding: '4pt 10pt',
                 backgroundColor: theme.secondaryColor + '20',
                 borderRadius: '4pt',
                 fontSize: `${typography.bodySize - 1}pt`,
+                textAlign: 'center',
               }}>
                 {skill.name}
               </span>
@@ -208,7 +210,8 @@ export function ClassicTemplate({ data, theme, typography }: { data: CVData; the
 export function SidebarTemplate({ data, theme, typography }: { data: CVData; theme: ThemeConfig; typography: TypographyConfig }) {
   const formatDate = (date: string) => {
     if (!date) return '';
-    const d = new Date(date);
+    const [year, month] = date.split('-');
+    const d = new Date(parseInt(year), parseInt(month) - 1, 1);
     return d.toLocaleDateString('es-CL', { month: 'short', year: 'numeric' });
   };
 
@@ -363,7 +366,7 @@ export function SidebarTemplate({ data, theme, typography }: { data: CVData; the
             }}>
               Perfil Profesional
             </h2>
-            <p style={{ margin: 0, textAlign: 'justify' }}>{data.basics.summary}</p>
+            <p style={{ margin: 0, textAlign: 'justify', whiteSpace: 'pre-wrap' }}>{data.basics.summary}</p>
           </section>
         )}
 
@@ -391,7 +394,7 @@ export function SidebarTemplate({ data, theme, typography }: { data: CVData; the
                 <p style={{ margin: '2pt 0', color: theme.secondaryColor, fontWeight: 500 }}>
                   {job.company}{job.location ? ` • ${job.location}` : ''}
                 </p>
-                {job.summary && <p style={{ margin: '5pt 0', textAlign: 'justify' }}>{job.summary}</p>}
+                {job.summary && <p style={{ margin: '5pt 0', textAlign: 'justify', whiteSpace: 'pre-wrap' }}>{job.summary}</p>}
                 {job.highlights.length > 0 && (
                   <ul style={{ margin: '5pt 0', paddingLeft: '15pt' }}>
                     {job.highlights.map((h, i) => <li key={i} style={{ marginBottom: '3pt' }}>{h}</li>)}
@@ -460,7 +463,8 @@ export function SidebarTemplate({ data, theme, typography }: { data: CVData; the
 export function ModernTemplate({ data, theme, typography }: { data: CVData; theme: ThemeConfig; typography: TypographyConfig }) {
   const formatDate = (date: string) => {
     if (!date) return '';
-    const d = new Date(date);
+    const [year, month] = date.split('-');
+    const d = new Date(parseInt(year), parseInt(month) - 1, 1);
     return d.toLocaleDateString('es-CL', { month: 'short', year: 'numeric' });
   };
 
@@ -541,7 +545,7 @@ export function ModernTemplate({ data, theme, typography }: { data: CVData; them
               <span style={{ width: '4px', height: '20px', backgroundColor: theme.accentColor, display: 'inline-block' }} />
               Perfil Profesional
             </h2>
-            <p style={{ margin: 0, textAlign: 'justify' }}>{data.basics.summary}</p>
+            <p style={{ margin: 0, textAlign: 'justify', whiteSpace: 'pre-wrap' }}>{data.basics.summary}</p>
           </section>
         )}
 
@@ -581,7 +585,12 @@ export function ModernTemplate({ data, theme, typography }: { data: CVData; them
                   <p style={{ margin: '2pt 0', color: theme.accentColor, fontWeight: 500 }}>
                     {job.company}{job.location ? ` • ${job.location}` : ''}
                   </p>
-                  {job.summary && <p style={{ margin: '5pt 0', textAlign: 'justify' }}>{job.summary}</p>}
+                  {job.summary && <p style={{ margin: '5pt 0', textAlign: 'justify', whiteSpace: 'pre-wrap' }}>{job.summary}</p>}
+                  {job.highlights.length > 0 && (
+                    <ul style={{ margin: '5pt 0', paddingLeft: '15pt' }}>
+                      {job.highlights.map((h, i) => <li key={i} style={{ marginBottom: '3pt' }}>{h}</li>)}
+                    </ul>
+                  )}
                 </div>
               </div>
             ))}
@@ -631,7 +640,7 @@ export function ModernTemplate({ data, theme, typography }: { data: CVData; them
                 <span style={{ width: '4px', height: '20px', backgroundColor: theme.accentColor, display: 'inline-block' }} />
                 Habilidades
               </h2>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6pt' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '6pt' }}>
                 {data.skills.map((skill, idx) => (
                   <span key={skill.id || idx} style={{
                     padding: '4pt 10pt',
@@ -639,6 +648,7 @@ export function ModernTemplate({ data, theme, typography }: { data: CVData; them
                     color: '#fff',
                     borderRadius: '15pt',
                     fontSize: `${typography.bodySize - 1}pt`,
+                    textAlign: 'center',
                   }}>
                     {skill.name}
                   </span>
@@ -647,6 +657,56 @@ export function ModernTemplate({ data, theme, typography }: { data: CVData; them
             </section>
           )}
         </div>
+
+        {/* Languages */}
+        {data.languages.length > 0 && (
+          <section style={{ marginTop: '20pt' }}>
+            <h2 style={{
+              fontFamily: `'${typography.headingFont}', sans-serif`,
+              fontSize: `${typography.headingSize}pt`,
+              color: theme.primaryColor,
+              marginBottom: '10pt',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10pt',
+            }}>
+              <span style={{ width: '4px', height: '20px', backgroundColor: theme.accentColor, display: 'inline-block' }} />
+              Idiomas
+            </h2>
+            <div style={{ display: 'flex', gap: '15pt', flexWrap: 'wrap' }}>
+              {data.languages.map((lang, idx) => (
+                <span key={lang.id || idx}>
+                  <strong>{lang.language}</strong>: {lang.fluency}
+                </span>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Certificates */}
+        {data.certificates.length > 0 && (
+          <section style={{ marginTop: '20pt' }}>
+            <h2 style={{
+              fontFamily: `'${typography.headingFont}', sans-serif`,
+              fontSize: `${typography.headingSize}pt`,
+              color: theme.primaryColor,
+              marginBottom: '10pt',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10pt',
+            }}>
+              <span style={{ width: '4px', height: '20px', backgroundColor: theme.accentColor, display: 'inline-block' }} />
+              Certificaciones
+            </h2>
+            {data.certificates.map((cert, idx) => (
+              <div key={cert.id || idx} style={{ marginBottom: '6pt' }}>
+                <strong>{cert.name}</strong>
+                {cert.issuer && <span style={{ color: theme.mutedColor }}> — {cert.issuer}</span>}
+                {cert.date && <span style={{ color: theme.mutedColor }}> ({formatDate(cert.date)})</span>}
+              </div>
+            ))}
+          </section>
+        )}
       </main>
     </div>
   );
@@ -656,7 +716,8 @@ export function ModernTemplate({ data, theme, typography }: { data: CVData; them
 export function MinimalTemplate({ data, theme, typography }: { data: CVData; theme: ThemeConfig; typography: TypographyConfig }) {
   const formatDate = (date: string) => {
     if (!date) return '';
-    const d = new Date(date);
+    const [year, month] = date.split('-');
+    const d = new Date(parseInt(year), parseInt(month) - 1, 1);
     return d.toLocaleDateString('es-CL', { month: 'short', year: 'numeric' });
   };
 
@@ -700,7 +761,7 @@ export function MinimalTemplate({ data, theme, typography }: { data: CVData; the
       {/* Summary */}
       {data.basics.summary && (
         <section style={{ marginBottom: '20pt' }}>
-          <p style={{ margin: 0, textAlign: 'center', fontStyle: 'italic', color: '#3f3f46' }}>{data.basics.summary}</p>
+          <p style={{ margin: 0, textAlign: 'center', fontStyle: 'italic', color: '#3f3f46', whiteSpace: 'pre-wrap' }}>{data.basics.summary}</p>
         </section>
       )}
 
@@ -727,7 +788,12 @@ export function MinimalTemplate({ data, theme, typography }: { data: CVData; the
               <p style={{ margin: '3pt 0', color: '#71717a', fontFamily: `'${typography.bodyFont}', sans-serif` }}>
                 {job.company}
               </p>
-              {job.summary && <p style={{ margin: '5pt 0', fontFamily: `'${typography.bodyFont}', sans-serif` }}>{job.summary}</p>}
+              {job.summary && <p style={{ margin: '5pt 0', fontFamily: `'${typography.bodyFont}', sans-serif`, whiteSpace: 'pre-wrap' }}>{job.summary}</p>}
+              {job.highlights.length > 0 && (
+                <ul style={{ margin: '5pt 0', paddingLeft: '15pt', fontFamily: `'${typography.bodyFont}', sans-serif` }}>
+                  {job.highlights.map((h, i) => <li key={i} style={{ marginBottom: '3pt' }}>{h}</li>)}
+                </ul>
+              )}
             </div>
           ))}
         </section>
@@ -763,7 +829,7 @@ export function MinimalTemplate({ data, theme, typography }: { data: CVData; the
 
       {/* Skills */}
       {data.skills.length > 0 && (
-        <section>
+        <section style={{ marginBottom: '20pt' }}>
           <h2 style={{
             fontSize: `${typography.headingSize - 1}pt`,
             marginBottom: '12pt',
@@ -778,6 +844,46 @@ export function MinimalTemplate({ data, theme, typography }: { data: CVData; the
           </p>
         </section>
       )}
+
+      {/* Languages */}
+      {data.languages.length > 0 && (
+        <section style={{ marginBottom: '20pt' }}>
+          <h2 style={{
+            fontSize: `${typography.headingSize - 1}pt`,
+            marginBottom: '12pt',
+            letterSpacing: '2pt',
+            textTransform: 'uppercase',
+            fontWeight: 400,
+          }}>
+            Idiomas
+          </h2>
+          <p style={{ fontFamily: `'${typography.bodyFont}', sans-serif`, color: '#3f3f46' }}>
+            {data.languages.map(l => `${l.language} (${l.fluency})`).join(' • ')}
+          </p>
+        </section>
+      )}
+
+      {/* Certificates */}
+      {data.certificates.length > 0 && (
+        <section>
+          <h2 style={{
+            fontSize: `${typography.headingSize - 1}pt`,
+            marginBottom: '12pt',
+            letterSpacing: '2pt',
+            textTransform: 'uppercase',
+            fontWeight: 400,
+          }}>
+            Certificaciones
+          </h2>
+          {data.certificates.map((cert, idx) => (
+            <div key={cert.id || idx} style={{ marginBottom: '8pt', fontFamily: `'${typography.bodyFont}', sans-serif`, color: '#3f3f46' }}>
+              <strong style={{ color: '#18181b' }}>{cert.name}</strong>
+              {cert.issuer && <span> — {cert.issuer}</span>}
+              {cert.date && <span style={{ color: '#71717a' }}> ({formatDate(cert.date)})</span>}
+            </div>
+          ))}
+        </section>
+      )}
     </div>
   );
 }
@@ -786,7 +892,8 @@ export function MinimalTemplate({ data, theme, typography }: { data: CVData; the
 export function CreativeTemplate({ data, theme, typography }: { data: CVData; theme: ThemeConfig; typography: TypographyConfig }) {
   const formatDate = (date: string) => {
     if (!date) return '';
-    const d = new Date(date);
+    const [year, month] = date.split('-');
+    const d = new Date(parseInt(year), parseInt(month) - 1, 1);
     return d.toLocaleDateString('es-CL', { month: 'short', year: 'numeric' });
   };
 
@@ -866,7 +973,7 @@ export function CreativeTemplate({ data, theme, typography }: { data: CVData; th
             }}>
               ✨ Sobre mí
             </h2>
-            <p style={{ margin: 0, textAlign: 'justify' }}>{data.basics.summary}</p>
+            <p style={{ margin: 0, textAlign: 'justify', whiteSpace: 'pre-wrap' }}>{data.basics.summary}</p>
           </section>
         )}
 
@@ -905,7 +1012,12 @@ export function CreativeTemplate({ data, theme, typography }: { data: CVData; th
                 <p style={{ margin: '5pt 0', color: theme.secondaryColor, fontWeight: 500 }}>
                   {job.company}
                 </p>
-                {job.summary && <p style={{ margin: '5pt 0' }}>{job.summary}</p>}
+                {job.summary && <p style={{ margin: '5pt 0', whiteSpace: 'pre-wrap' }}>{job.summary}</p>}
+                {job.highlights.length > 0 && (
+                  <ul style={{ margin: '5pt 0', paddingLeft: '15pt' }}>
+                    {job.highlights.map((h, i) => <li key={i} style={{ marginBottom: '3pt' }}>{h}</li>)}
+                  </ul>
+                )}
               </div>
             ))}
           </section>
@@ -946,7 +1058,7 @@ export function CreativeTemplate({ data, theme, typography }: { data: CVData; th
               }}>
                 ⭐ Habilidades
               </h2>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6pt' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '6pt' }}>
                 {data.skills.map((skill, idx) => (
                   <span key={skill.id || idx} style={{
                     padding: '5pt 12pt',
@@ -954,6 +1066,7 @@ export function CreativeTemplate({ data, theme, typography }: { data: CVData; th
                     borderRadius: '20pt',
                     fontSize: `${typography.bodySize - 1}pt`,
                     border: `1px solid ${theme.secondaryColor}50`,
+                    textAlign: 'center',
                   }}>
                     {skill.name}
                   </span>
@@ -962,6 +1075,60 @@ export function CreativeTemplate({ data, theme, typography }: { data: CVData; th
             </section>
           )}
         </div>
+
+        {/* Languages */}
+        {data.languages.length > 0 && (
+          <section style={{ marginTop: '20pt' }}>
+            <h2 style={{
+              fontFamily: `'${typography.headingFont}', sans-serif`,
+              fontSize: `${typography.headingSize}pt`,
+              color: theme.primaryColor,
+              marginBottom: '10pt',
+            }}>
+              🌍 Idiomas
+            </h2>
+            <div style={{ display: 'flex', gap: '10pt', flexWrap: 'wrap' }}>
+              {data.languages.map((lang, idx) => (
+                <span key={lang.id || idx} style={{
+                  padding: '4pt 12pt',
+                  borderRadius: '20pt',
+                  border: `1px solid ${theme.primaryColor}50`,
+                  fontSize: `${typography.bodySize - 1}pt`,
+                }}>
+                  <strong>{lang.language}</strong> · {lang.fluency}
+                </span>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Certificates */}
+        {data.certificates.length > 0 && (
+          <section style={{ marginTop: '20pt' }}>
+            <h2 style={{
+              fontFamily: `'${typography.headingFont}', sans-serif`,
+              fontSize: `${typography.headingSize}pt`,
+              color: theme.primaryColor,
+              marginBottom: '10pt',
+            }}>
+              🏆 Certificaciones
+            </h2>
+            {data.certificates.map((cert, idx) => (
+              <div key={cert.id || idx} style={{
+                marginBottom: '8pt',
+                padding: '8pt 12pt',
+                backgroundColor: '#fff',
+                borderRadius: '8pt',
+                borderLeft: `4px solid ${theme.accentColor}`,
+                boxShadow: '0 1px 4px rgba(0,0,0,0.05)',
+              }}>
+                <strong>{cert.name}</strong>
+                {cert.issuer && <span style={{ color: theme.mutedColor }}> — {cert.issuer}</span>}
+                {cert.date && <span style={{ color: theme.mutedColor }}> ({formatDate(cert.date)})</span>}
+              </div>
+            ))}
+          </section>
+        )}
       </main>
     </div>
   );
@@ -971,7 +1138,8 @@ export function CreativeTemplate({ data, theme, typography }: { data: CVData; th
 export function ExecutiveTemplate({ data, theme, typography }: { data: CVData; theme: ThemeConfig; typography: TypographyConfig }) {
   const formatDate = (date: string) => {
     if (!date) return '';
-    const d = new Date(date);
+    const [year, month] = date.split('-');
+    const d = new Date(parseInt(year), parseInt(month) - 1, 1);
     return d.toLocaleDateString('es-CL', { month: 'short', year: 'numeric' });
   };
 
@@ -1060,7 +1228,7 @@ export function ExecutiveTemplate({ data, theme, typography }: { data: CVData; t
       <main style={{ padding: '15mm 20mm 20mm' }}>
         {data.basics.summary && (
           <section style={{ marginBottom: '15pt', padding: '10pt 15pt', borderLeft: `4pt solid ${theme.accentColor}`, backgroundColor: theme.accentColor + '08' }}>
-            <p style={{ margin: 0, fontStyle: 'italic', fontSize: `${typography.bodySize + 1}pt`, lineHeight: 1.6 }}>
+            <p style={{ margin: 0, fontStyle: 'italic', fontSize: `${typography.bodySize + 1}pt`, lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>
               "{data.basics.summary}"
             </p>
           </section>
@@ -1112,7 +1280,7 @@ export function ExecutiveTemplate({ data, theme, typography }: { data: CVData; t
                   <p style={{ margin: '3pt 0', color: theme.secondaryColor, fontWeight: 600, fontStyle: 'italic' }}>
                     {job.company}{job.location ? ` · ${job.location}` : ''}
                   </p>
-                  {job.summary && <p style={{ margin: '6pt 0', textAlign: 'justify' }}>{job.summary}</p>}
+                  {job.summary && <p style={{ margin: '6pt 0', textAlign: 'justify', whiteSpace: 'pre-wrap' }}>{job.summary}</p>}
                   {job.highlights.length > 0 && (
                     <ul style={{ margin: '5pt 0', paddingLeft: '18pt' }}>
                       {job.highlights.map((h, i) => <li key={i} style={{ marginBottom: '3pt' }}>{h}</li>)}
@@ -1224,7 +1392,8 @@ export function ExecutiveTemplate({ data, theme, typography }: { data: CVData; t
 export function TimelineTemplate({ data, theme, typography }: { data: CVData; theme: ThemeConfig; typography: TypographyConfig }) {
   const formatDate = (date: string) => {
     if (!date) return '';
-    const d = new Date(date);
+    const [year, month] = date.split('-');
+    const d = new Date(parseInt(year), parseInt(month) - 1, 1);
     return d.toLocaleDateString('es-CL', { month: 'short', year: 'numeric' });
   };
 
@@ -1351,6 +1520,7 @@ export function TimelineTemplate({ data, theme, typography }: { data: CVData; th
               fontStyle: 'italic',
               maxWidth: '150mm',
               marginInline: 'auto',
+              whiteSpace: 'pre-wrap',
             }}>
               {data.basics.summary}
             </p>
@@ -1417,7 +1587,7 @@ export function TimelineTemplate({ data, theme, typography }: { data: CVData; th
                     <p style={{ margin: '3pt 0', color: theme.secondaryColor, fontWeight: 600 }}>
                       🏢 {job.company}{job.location ? ` • ${job.location}` : ''}
                     </p>
-                    {job.summary && <p style={{ margin: '6pt 0', textAlign: 'justify' }}>{job.summary}</p>}
+                    {job.summary && <p style={{ margin: '6pt 0', textAlign: 'justify', whiteSpace: 'pre-wrap' }}>{job.summary}</p>}
                     {job.highlights.length > 0 && (
                       <ul style={{ margin: '5pt 0', paddingLeft: '15pt' }}>
                         {job.highlights.map((h, i) => <li key={i}>{h}</li>)}
@@ -1472,7 +1642,7 @@ export function TimelineTemplate({ data, theme, typography }: { data: CVData; th
               }}>
                 ⚡ Habilidades
               </h3>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6pt' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '6pt' }}>
                 {data.skills.map((skill, idx) => (
                   <span key={skill.id || idx} style={{
                     padding: '5pt 12pt',
@@ -1482,6 +1652,7 @@ export function TimelineTemplate({ data, theme, typography }: { data: CVData; th
                     fontSize: `${typography.bodySize - 1}pt`,
                     fontWeight: 600,
                     boxShadow: `0 2pt 4pt ${theme.primaryColor}30`,
+                    textAlign: 'center',
                   }}>
                     {skill.name}
                   </span>
@@ -1492,7 +1663,7 @@ export function TimelineTemplate({ data, theme, typography }: { data: CVData; th
         </div>
 
         {data.languages.length > 0 && (
-          <section>
+          <section style={{ marginBottom: '15pt' }}>
             <h3 style={{
               fontFamily: `'${typography.headingFont}', sans-serif`,
               fontSize: `${typography.headingSize}pt`,
@@ -1517,6 +1688,33 @@ export function TimelineTemplate({ data, theme, typography }: { data: CVData; th
             </div>
           </section>
         )}
+
+        {data.certificates.length > 0 && (
+          <section>
+            <h3 style={{
+              fontFamily: `'${typography.headingFont}', sans-serif`,
+              fontSize: `${typography.headingSize}pt`,
+              color: theme.primaryColor,
+              marginBottom: '10pt',
+              fontWeight: 700,
+            }}>
+              🏆 Certificaciones
+            </h3>
+            {data.certificates.map((cert, idx) => (
+              <div key={cert.id || idx} style={{
+                marginBottom: '8pt',
+                padding: '8pt 12pt',
+                backgroundColor: theme.primaryColor + '08',
+                borderRadius: '6pt',
+                borderLeft: `3pt solid ${theme.accentColor}`,
+              }}>
+                <strong>{cert.name}</strong>
+                {cert.issuer && <span style={{ color: theme.mutedColor }}> — {cert.issuer}</span>}
+                {cert.date && <span style={{ color: theme.mutedColor }}> ({formatDate(cert.date)})</span>}
+              </div>
+            ))}
+          </section>
+        )}
       </main>
     </div>
   );
@@ -1526,7 +1724,8 @@ export function TimelineTemplate({ data, theme, typography }: { data: CVData; th
 export function InfographicTemplate({ data, theme, typography }: { data: CVData; theme: ThemeConfig; typography: TypographyConfig }) {
   const formatDate = (date: string) => {
     if (!date) return '';
-    const d = new Date(date);
+    const [year, month] = date.split('-');
+    const d = new Date(parseInt(year), parseInt(month) - 1, 1);
     return d.toLocaleDateString('es-CL', { month: 'short', year: 'numeric' });
   };
 
@@ -1738,7 +1937,7 @@ export function InfographicTemplate({ data, theme, typography }: { data: CVData;
               borderRadius: '8pt',
               borderLeft: `4pt solid ${theme.accentColor}`,
             }}>
-              <p style={{ margin: 0, fontSize: `${typography.bodySize + 1}pt`, lineHeight: 1.6 }}>
+              <p style={{ margin: 0, fontSize: `${typography.bodySize + 1}pt`, lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>
                 {data.basics.summary}
               </p>
             </div>
@@ -1794,7 +1993,7 @@ export function InfographicTemplate({ data, theme, typography }: { data: CVData;
                 <p style={{ margin: '3pt 0', color: theme.secondaryColor, fontWeight: 600 }}>
                   {job.company}{job.location ? ` · ${job.location}` : ''}
                 </p>
-                {job.summary && <p style={{ margin: '5pt 0', fontSize: `${typography.bodySize}pt` }}>{job.summary}</p>}
+                {job.summary && <p style={{ margin: '5pt 0', fontSize: `${typography.bodySize}pt`, whiteSpace: 'pre-wrap' }}>{job.summary}</p>}
               </div>
             ))}
           </section>
