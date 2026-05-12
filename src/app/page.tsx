@@ -107,15 +107,45 @@ export default function Home() {
         try {
           const cvEl = printWindow.document.querySelector('.cv-template');
           if (cvEl) {
-            // A4 height in CSS pixels at 96 DPI: 297mm × (96px/25.4mm) ≈ 1122px
-            const A4H = Math.round((297 / 25.4) * 96);
+            // A4 dimensions in CSS pixels at 96 DPI
+            const PX_PER_MM = 96 / 25.4;
+            const A4W_MM = 210;
+            const A4H_MM = 297;
+            const A4H_PX = Math.round(A4H_MM * PX_PER_MM); // ≈ 1122px
+
             const contentH = cvEl.scrollHeight;
 
-            if (contentH > A4H) {
-              const scale = (A4H / contentH).toFixed(4);
-              // zoom (unlike transform) changes layout flow → browser counts fewer pages
+            if (contentH > A4H_PX) {
+              const scaleNum = A4H_PX / contentH;
+              const scale = scaleNum.toFixed(6);
+
+              // When zoom:scale is applied to html, every mm shrinks by the scale factor.
+              // To fill the full A4 width after zoom we must set the width to A4W/scale BEFORE zoom.
+              // Example: scale=0.7 → expandedWidth=300mm → after zoom 300mm×0.7=210mm ✓
+              const expandedW = (A4W_MM / scaleNum).toFixed(2);
+
               const s = printWindow.document.createElement('style');
-              s.textContent = `@media print { html { zoom: ${scale}; } @page { size: A4 portrait; margin: 0; } }`;
+              s.textContent = `
+                @media print {
+                  @page { size: A4 portrait; margin: 0; }
+                  html {
+                    zoom: ${scale};
+                    margin: 0 !important;
+                    padding: 0 !important;
+                  }
+                  body {
+                    margin: 0 !important;
+                    padding: 0 !important;
+                    background: white !important;
+                    width: ${expandedW}mm !important;
+                  }
+                  .cv-template {
+                    width: ${expandedW}mm !important;
+                    min-height: auto !important;
+                    box-shadow: none !important;
+                  }
+                }
+              `;
               printWindow.document.head.appendChild(s);
             }
           }
