@@ -328,4 +328,84 @@ export const TemplateThumbnails: Record<string, React.ReactNode> = {
       <rect x="76" y="126" width="18" height="5" fill="#4f98a3" rx="2.5"/>
     </svg>
   ),
+  elegant: (
+    <svg viewBox="0 0 120 160" className="w-full h-full">
+      <rect width="120" height="160" fill="#ffffff" rx="4"/>
+      {/* Narrow sidebar */}
+      <rect x="0" y="0" width="35" height="160" fill="#0f3638" rx="4"/>
+      <rect x="31" y="0" width="4" height="160" fill="#0f3638"/>
+      {/* Avatar */}
+      <circle cx="17.5" cy="18" r="9" fill="#01696f" stroke="rgba(255,255,255,0.15)" strokeWidth="1"/>
+      {/* Name serif */}
+      <rect x="5" y="32" width="25" height="3" fill="#ffffff" rx="0.5"/>
+      <rect x="9" y="37" width="17" height="2.5" fill="rgba(255,255,255,0.75)" rx="0.5"/>
+      <rect x="8" y="43" width="19" height="2" fill="#4f98a3" rx="0.5"/>
+      {/* Divider */}
+      <rect x="13" y="48" width="9" height="1" fill="#01696f" rx="0.5"/>
+      {/* Contact */}
+      <rect x="5" y="54" width="25" height="1.5" fill="#4f98a3" rx="0.5"/>
+      <rect x="5" y="59" width="25" height="2" fill="rgba(232,240,239,0.4)" rx="0.5"/>
+      <rect x="5" y="64" width="20" height="2" fill="rgba(232,240,239,0.4)" rx="0.5"/>
+      <rect x="5" y="69" width="23" height="2" fill="rgba(232,240,239,0.4)" rx="0.5"/>
+      {/* Thin skill bars */}
+      <rect x="5" y="79" width="25" height="1.5" fill="#4f98a3" rx="0.5"/>
+      <rect x="5" y="84" width="18" height="1.5" fill="rgba(232,240,239,0.5)" rx="0.5"/>
+      <rect x="5" y="87" width="25" height="1.5" fill="rgba(255,255,255,0.1)" rx="0.75"/>
+      <rect x="5" y="87" width="22" height="1.5" fill="#4f98a3" rx="0.75"/>
+      <rect x="5" y="92" width="18" height="1.5" fill="rgba(232,240,239,0.5)" rx="0.5"/>
+      <rect x="5" y="95" width="25" height="1.5" fill="rgba(255,255,255,0.1)" rx="0.75"/>
+      <rect x="5" y="95" width="19" height="1.5" fill="#4f98a3" rx="0.75"/>
+      {/* Soft skill dots */}
+      <rect x="5" y="105" width="25" height="1.5" fill="#4f98a3" rx="0.5"/>
+      <circle cx="6.5" cy="112" r="1" fill="#4f98a3"/>
+      <rect x="10" y="111" width="20" height="1.5" fill="rgba(232,240,239,0.4)" rx="0.5"/>
+      <circle cx="6.5" cy="118" r="1" fill="#4f98a3"/>
+      <rect x="10" y="117" width="17" height="1.5" fill="rgba(232,240,239,0.4)" rx="0.5"/>
+      <circle cx="6.5" cy="124" r="1" fill="#4f98a3"/>
+      <rect x="10" y="123" width="21" height="1.5" fill="rgba(232,240,239,0.4)" rx="0.5"/>
+      {/* Main header */}
+      <rect x="41" y="12" width="45" height="5" fill="#0f3638" rx="0.5"/>
+      <rect x="41" y="20" width="30" height="3" fill="#cedcd8" rx="0.5"/>
+      <rect x="41" y="26" width="35" height="2" fill="#01696f" rx="0.5"/>
+      <rect x="41" y="31" width="72" height="1" fill="#0f3638"/>
+      {/* Profile with left rule */}
+      <rect x="41" y="37" width="20" height="1.5" fill="#0f3638" rx="0.5"/>
+      <rect x="41" y="42" width="1.5" height="12" fill="#cedcd8"/>
+      <rect x="45" y="42" width="68" height="10" fill="#f7f9f9" rx="1"/>
+      {/* Timeline entries */}
+      <rect x="41" y="60" width="20" height="1.5" fill="#0f3638" rx="0.5"/>
+      <rect x="41" y="65" width="1.5" height="18" fill="#cedcd8"/>
+      <circle cx="41.75" cy="67" r="1.5" fill="#01696f" stroke="#ffffff" strokeWidth="0.5"/>
+      <rect x="45" y="65" width="35" height="2.5" fill="#1a1814" rx="0.5"/>
+      <rect x="45" y="70" width="28" height="2" fill="#0c4e54" rx="0.5"/>
+      <rect x="96" y="65" width="17" height="2" fill="#aaa9a4" rx="0.5"/>
+      <rect x="45" y="75" width="60" height="1.5" fill="#6b6a65" rx="0.5"/>
+      <rect x="45" y="79" width="55" height="1.5" fill="#6b6a65" rx="0.5"/>
+      {/* Education */}
+      <rect x="41" y="90" width="20" height="1.5" fill="#0f3638" rx="0.5"/>
+      <rect x="41" y="95" width="1.5" height="10" fill="#cedcd8"/>
+      <circle cx="41.75" cy="97" r="1.5" fill="#01696f" stroke="#ffffff" strokeWidth="0.5"/>
+      <rect x="45" y="95" width="38" height="2.5" fill="#1a1814" rx="0.5"/>
+      <rect x="45" y="100" width="30" height="2" fill="#0c4e54" rx="0.5"/>
+      <rect x="96" y="95" width="17" height="2" fill="#aaa9a4" rx="0.5"/>
+      {/* Course card grid */}
+      <rect x="41" y="112" width="20" height="1.5" fill="#0f3638" rx="0.5"/>
+      <rect x="41" y="117" width="34" height="13" fill="#f7f9f9" rx="1.5" stroke="rgba(1,105,111,0.12)" strokeWidth="0.5"/>
+      <rect x="44" y="120" width="26" height="2" fill="#1a1814" rx="0.5"/>
+      <rect x="44" y="124" width="14" height="2" fill="#01696f" rx="0.5"/>
+      <rect x="79" y="117" width="34" height="13" fill="#f7f9f9" rx="1.5" stroke="rgba(1,105,111,0.12)" strokeWidth="0.5"/>
+      <rect x="82" y="120" width="26" height="2" fill="#1a1814" rx="0.5"/>
+      <rect x="82" y="124" width="14" height="2" fill="#01696f" rx="0.5"/>
+      <rect x="41" y="133" width="34" height="13" fill="#f7f9f9" rx="1.5" stroke="rgba(1,105,111,0.12)" strokeWidth="0.5"/>
+      <rect x="44" y="136" width="26" height="2" fill="#1a1814" rx="0.5"/>
+      <rect x="44" y="140" width="14" height="2" fill="#01696f" rx="0.5"/>
+      <rect x="79" y="133" width="34" height="13" fill="#f7f9f9" rx="1.5" stroke="rgba(1,105,111,0.12)" strokeWidth="0.5"/>
+      <rect x="82" y="136" width="26" height="2" fill="#1a1814" rx="0.5"/>
+      <rect x="82" y="140" width="14" height="2" fill="#01696f" rx="0.5"/>
+      {/* Footer */}
+      <rect x="41" y="151" width="72" height="0.5" fill="#e5e5e5"/>
+      <rect x="41" y="154" width="28" height="1.5" fill="#aaa9a4" rx="0.5"/>
+      <rect x="92" y="154" width="21" height="1.5" fill="#aaa9a4" rx="0.5"/>
+    </svg>
+  ),
 };

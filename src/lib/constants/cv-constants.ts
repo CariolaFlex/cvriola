@@ -226,6 +226,21 @@ export const TEMPLATE_DEFINITIONS: TemplateDefinition[] = [
       mutedColor: '#6b6a65',
     },
   },
+  {
+    id: 'elegant',
+    name: 'Elegant',
+    description: 'Sidebar angosto oscuro, tipografía editorial serif y grilla de cursos',
+    category: 'creative',
+    features: ['Photo support', 'Skill bars', 'Course cards'],
+    defaultTheme: {
+      primaryColor: '#0f3638',
+      secondaryColor: '#4f98a3',
+      accentColor: '#01696f',
+      backgroundColor: '#ffffff',
+      textColor: '#1a1814',
+      mutedColor: '#6b6a65',
+    },
+  },
 ];
 
 // Section Configuration
@@ -273,6 +288,7 @@ export const createDefaultCV = (id: string, templateId: string = 'classic'): CVD
         countryCode: 'CL',
       },
       profiles: [],
+      personalDetails: '',
     },
     work: [],
     education: [],

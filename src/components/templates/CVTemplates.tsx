@@ -2075,6 +2075,454 @@ export function InfographicTemplate({ data, theme, typography }: { data: CVData;
   );
 }
 
+// Elegant Template - Narrow dark sidebar, editorial serif display, course card grid
+export function ElegantTemplate({ data, theme, typography }: { data: CVData; theme: ThemeConfig; typography: TypographyConfig }) {
+  const formatDate = (date: string) => {
+    if (!date) return '';
+    const [year, month] = date.split('-');
+    const d = new Date(parseInt(year), parseInt(month) - 1, 1);
+    return d.toLocaleDateString('es-CL', { month: 'short', year: 'numeric' });
+  };
+
+  // "Nombre Apellido Segundo" -> el primer par en bold, el resto en light
+  const nameParts = (data.basics.name || 'Tu Nombre').trim().split(/\s+/);
+  const nameLead = nameParts.slice(0, 2).join(' ');
+  const nameTail = nameParts.slice(2).join(' ');
+
+  const institution = data.education[0]?.institution || '';
+  const sidebarTitleSize = `${typography.bodySize - 2}pt`;
+  const sectionTitleSize = `${typography.bodySize - 2}pt`;
+
+  const sidebarSectionTitle: React.CSSProperties = {
+    fontSize: sidebarTitleSize,
+    fontWeight: 600,
+    letterSpacing: '0.18em',
+    textTransform: 'uppercase',
+    color: theme.secondaryColor,
+    paddingBottom: '1.5mm',
+    marginBottom: '2mm',
+    borderBottom: `1px solid ${theme.secondaryColor}4d`,
+  };
+
+  const sectionTitle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '2mm',
+    fontSize: sectionTitleSize,
+    fontWeight: 600,
+    letterSpacing: '0.16em',
+    textTransform: 'uppercase',
+    color: theme.primaryColor,
+    marginBottom: '2mm',
+  };
+
+  const sectionRule = (
+    <span style={{ flex: 1, height: '1px', background: `linear-gradient(90deg, ${theme.primaryColor} 0%, transparent 100%)`, opacity: 0.2 }} />
+  );
+
+  const entry: React.CSSProperties = {
+    display: 'grid',
+    gridTemplateColumns: '1fr auto',
+    gap: '2mm',
+    padding: '2mm 2mm 2mm 3mm',
+    borderLeft: `2px solid ${theme.secondaryColor}40`,
+    position: 'relative',
+  };
+
+  const entryDot: React.CSSProperties = {
+    position: 'absolute',
+    left: '-4px',
+    top: '2mm',
+    width: '6px',
+    height: '6px',
+    borderRadius: '50%',
+    backgroundColor: theme.accentColor,
+    border: `1.5px solid ${theme.backgroundColor}`,
+    boxShadow: `0 0 0 0.5px ${theme.accentColor}`,
+  };
+
+  const entryDate: React.CSSProperties = {
+    fontSize: `${typography.bodySize - 2}pt`,
+    color: theme.mutedColor,
+    fontWeight: 500,
+    whiteSpace: 'nowrap',
+    letterSpacing: '0.04em',
+    textAlign: 'right',
+  };
+
+  return (
+    <div
+      className="cv-template elegant"
+      style={{
+        fontFamily: `'${typography.bodyFont}', sans-serif`,
+        fontSize: `${typography.bodySize}pt`,
+        lineHeight: typography.lineHeight,
+        color: theme.textColor,
+        backgroundColor: theme.backgroundColor,
+        width: '210mm',
+        minHeight: '297mm',
+        display: 'grid',
+        gridTemplateColumns: '62mm 1fr',
+      }}
+    >
+      {/* Sidebar */}
+      <aside style={{
+        backgroundColor: theme.primaryColor,
+        color: '#e8f0ef',
+        padding: '14mm 8mm',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '6mm',
+      }}>
+        {/* Avatar + name */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3mm' }}>
+          <div style={{
+            width: '70px',
+            height: '70px',
+            borderRadius: '50%',
+            background: `linear-gradient(135deg, ${theme.accentColor} 0%, ${theme.secondaryColor} 100%)`,
+            border: '2px solid rgba(255,255,255,0.15)',
+            flexShrink: 0,
+            overflow: 'hidden',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            {data.basics.image ? (
+              <img src={data.basics.image} alt="Foto de perfil" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            ) : (
+              <svg viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.5" style={{ width: '36px', height: '36px', opacity: 0.9 }}>
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+            )}
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <h1 style={{
+              fontFamily: `'${typography.headingFont}', serif`,
+              fontSize: `${typography.headingSize}pt`,
+              fontWeight: 600,
+              color: '#ffffff',
+              lineHeight: 1.15,
+              letterSpacing: '0.01em',
+              margin: 0,
+            }}>
+              {nameLead}
+              {nameTail && (
+                <span style={{
+                  display: 'block',
+                  fontWeight: 300,
+                  fontStyle: 'italic',
+                  color: 'rgba(255,255,255,0.75)',
+                  fontSize: `${typography.headingSize - 2}pt`,
+                }}>
+                  {nameTail}
+                </span>
+              )}
+            </h1>
+            {data.basics.label && (
+              <div style={{
+                marginTop: '2mm',
+                fontSize: `${typography.bodySize - 1.5}pt`,
+                fontWeight: 500,
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                color: theme.secondaryColor,
+              }}>
+                {data.basics.label}
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div style={{ width: '28px', height: '2px', background: `linear-gradient(90deg, ${theme.accentColor}, transparent)`, margin: '0 auto' }} />
+
+        {/* Contact */}
+        <div>
+          <div style={sidebarSectionTitle}>Contacto</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2mm' }}>
+            {(data.basics.location.address || data.basics.location.city) && (
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '2mm', fontSize: `${typography.bodySize - 1}pt`, color: 'rgba(232,240,239,0.85)' }}>
+                <svg viewBox="0 0 24 24" fill="none" stroke={theme.secondaryColor} strokeWidth="2" style={{ width: '11px', height: '11px', flexShrink: 0, marginTop: '1px' }}>
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" />
+                </svg>
+                <span>
+                  {data.basics.location.address}
+                  {data.basics.location.address && <br />}
+                  {[data.basics.location.city, data.basics.location.region].filter(Boolean).join(', ')}
+                </span>
+              </div>
+            )}
+            {data.basics.phone && (
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '2mm', fontSize: `${typography.bodySize - 1}pt`, color: 'rgba(232,240,239,0.85)' }}>
+                <svg viewBox="0 0 24 24" fill="none" stroke={theme.secondaryColor} strokeWidth="2" style={{ width: '11px', height: '11px', flexShrink: 0, marginTop: '1px' }}>
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.1 19.79 19.79 0 0 1 1.6 4.56 2 2 0 0 1 3.58 2.36h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7 2 2 0 0 1 1.72 2.03z" />
+                </svg>
+                <span>{data.basics.phone}</span>
+              </div>
+            )}
+            {data.basics.email && (
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '2mm', fontSize: `${typography.bodySize - 1}pt`, color: 'rgba(232,240,239,0.85)', wordBreak: 'break-word' }}>
+                <svg viewBox="0 0 24 24" fill="none" stroke={theme.secondaryColor} strokeWidth="2" style={{ width: '11px', height: '11px', flexShrink: 0, marginTop: '1px' }}>
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" />
+                </svg>
+                <span>{data.basics.email}</span>
+              </div>
+            )}
+            {data.basics.url && (
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '2mm', fontSize: `${typography.bodySize - 1}pt`, color: 'rgba(232,240,239,0.85)', wordBreak: 'break-word' }}>
+                <svg viewBox="0 0 24 24" fill="none" stroke={theme.secondaryColor} strokeWidth="2" style={{ width: '11px', height: '11px', flexShrink: 0, marginTop: '1px' }}>
+                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                </svg>
+                <span>{data.basics.url}</span>
+              </div>
+            )}
+            {data.basics.personalDetails && (
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '2mm', fontSize: `${typography.bodySize - 1}pt`, color: 'rgba(232,240,239,0.85)' }}>
+                <svg viewBox="0 0 24 24" fill="none" stroke={theme.secondaryColor} strokeWidth="2" style={{ width: '11px', height: '11px', flexShrink: 0, marginTop: '1px' }}>
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                  <line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
+                <span>{data.basics.personalDetails}</span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Skills with bars */}
+        {data.skills.length > 0 && (
+          <div>
+            <div style={sidebarSectionTitle}>Áreas de Especialidad</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2mm' }}>
+              {data.skills.map((skill, idx) => (
+                <div key={skill.id || idx} style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                  <div style={{ fontSize: `${typography.bodySize - 1}pt`, color: 'rgba(232,240,239,0.85)' }}>{skill.name}</div>
+                  <div style={{ height: '3px', backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: '99px', overflow: 'hidden' }}>
+                    <div style={{
+                      width: `${skill.level}%`,
+                      height: '100%',
+                      background: `linear-gradient(90deg, ${theme.secondaryColor}, ${theme.accentColor})`,
+                      borderRadius: '99px',
+                    }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Soft skills */}
+        {data.interests.length > 0 && (
+          <div>
+            <div style={sidebarSectionTitle}>Aptitudes</div>
+            {data.interests.map((item, idx) => (
+              <div key={item.id || idx} style={{
+                fontSize: `${typography.bodySize - 1}pt`,
+                color: 'rgba(232,240,239,0.8)',
+                padding: '2px 0',
+                borderBottom: '1px solid rgba(255,255,255,0.05)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '2mm',
+              }}>
+                <span style={{ width: '4px', height: '4px', borderRadius: '50%', backgroundColor: theme.secondaryColor, flexShrink: 0 }} />
+                {item.name}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Languages */}
+        {data.languages.length > 0 && (
+          <div>
+            <div style={sidebarSectionTitle}>Idiomas</div>
+            {data.languages.map((lang, idx) => (
+              <div key={lang.id || idx} style={{
+                fontSize: `${typography.bodySize - 1}pt`,
+                color: 'rgba(232,240,239,0.8)',
+                padding: '2px 0',
+                display: 'flex',
+                justifyContent: 'space-between',
+                gap: '2mm',
+              }}>
+                <span>{lang.language}</span>
+                <span style={{ color: theme.secondaryColor }}>{lang.fluency}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </aside>
+
+      {/* Main */}
+      <main style={{ padding: '12mm 10mm 10mm', display: 'flex', flexDirection: 'column', gap: '4mm' }}>
+        <div style={{ borderBottom: `2px solid ${theme.primaryColor}`, paddingBottom: '3mm' }}>
+          <h2 style={{
+            fontFamily: `'${typography.headingFont}', serif`,
+            fontSize: `${typography.headingSize + 8}pt`,
+            fontWeight: 300,
+            color: theme.primaryColor,
+            lineHeight: 1.1,
+            letterSpacing: '-0.01em',
+            margin: 0,
+          }}>
+            <strong style={{ fontWeight: 600, display: 'block' }}>{nameLead}</strong>
+            {nameTail}
+          </h2>
+          {(data.basics.label || institution) && (
+            <div style={{
+              fontSize: `${typography.bodySize - 1.5}pt`,
+              fontWeight: 500,
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              color: theme.accentColor,
+              marginTop: '2mm',
+            }}>
+              {[data.basics.label, institution].filter(Boolean).join(' · ')}
+            </div>
+          )}
+        </div>
+
+        {/* Summary */}
+        {data.basics.summary && (
+          <section>
+            <div style={sectionTitle}>Perfil Profesional{sectionRule}</div>
+            <p style={{
+              margin: 0,
+              fontSize: `${typography.bodySize - 0.5}pt`,
+              color: theme.textColor,
+              paddingLeft: '3mm',
+              borderLeft: `2px solid ${theme.secondaryColor}40`,
+              whiteSpace: 'pre-wrap',
+            }}>
+              {data.basics.summary}
+            </p>
+          </section>
+        )}
+
+        {/* Work */}
+        {data.work.length > 0 && (
+          <section>
+            <div style={sectionTitle}>Historial Laboral{sectionRule}</div>
+            {data.work.map((job, idx) => (
+              <div key={job.id || idx} style={entry}>
+                <span style={entryDot} />
+                <div>
+                  <div style={{ fontWeight: 600, fontSize: `${typography.bodySize + 0.5}pt`, lineHeight: 1.25 }}>{job.position}</div>
+                  <div style={{ fontSize: `${typography.bodySize - 1}pt`, color: theme.accentColor, fontWeight: 500, marginTop: '1px' }}>
+                    {job.company}{job.location ? ` — ${job.location}` : ''}
+                  </div>
+                </div>
+                <div style={entryDate}>
+                  {formatDate(job.startDate)}
+                  <br />
+                  {job.endDate ? formatDate(job.endDate) : 'Actualidad'}
+                </div>
+                {(job.summary || job.highlights.length > 0) && (
+                  <div style={{ gridColumn: '1 / -1', marginTop: '1mm' }}>
+                    {job.summary && (
+                      <p style={{ margin: 0, fontSize: `${typography.bodySize - 1}pt`, color: theme.mutedColor, whiteSpace: 'pre-wrap' }}>{job.summary}</p>
+                    )}
+                    {job.highlights.length > 0 && (
+                      <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '1px' }}>
+                        {job.highlights.map((h, i) => (
+                          <li key={i} style={{ fontSize: `${typography.bodySize - 1}pt`, color: theme.mutedColor, paddingLeft: '0.8em', position: 'relative', lineHeight: 1.4 }}>
+                            <span style={{ position: 'absolute', left: 0, color: theme.accentColor }}>–</span>
+                            {h}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
+          </section>
+        )}
+
+        {/* Education */}
+        {data.education.length > 0 && (
+          <section>
+            <div style={sectionTitle}>Formación Académica{sectionRule}</div>
+            {data.education.map((edu, idx) => (
+              <div key={edu.id || idx} style={entry}>
+                <span style={entryDot} />
+                <div>
+                  <div style={{ fontWeight: 600, fontSize: `${typography.bodySize + 0.5}pt`, lineHeight: 1.25 }}>{edu.area}</div>
+                  <div style={{ fontSize: `${typography.bodySize - 1}pt`, color: theme.accentColor, fontWeight: 500, marginTop: '1px' }}>
+                    {edu.institution}{edu.studyType ? ` · ${edu.studyType}` : ''}
+                  </div>
+                </div>
+                <div style={entryDate}>
+                  {formatDate(edu.startDate)}
+                  <br />
+                  {edu.endDate ? formatDate(edu.endDate) : 'Actualidad'}
+                </div>
+              </div>
+            ))}
+          </section>
+        )}
+
+        {/* Certificates as card grid */}
+        {data.certificates.length > 0 && (
+          <section>
+            <div style={sectionTitle}>Cursos y Certificaciones{sectionRule}</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2mm' }}>
+              {data.certificates.map((cert, idx) => (
+                <div key={cert.id || idx} style={{
+                  backgroundColor: `${theme.secondaryColor}0f`,
+                  border: `1px solid ${theme.accentColor}1f`,
+                  borderRadius: '4px',
+                  padding: '2mm 3mm',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '1px',
+                }}>
+                  <div style={{ fontSize: `${typography.bodySize - 1}pt`, fontWeight: 500, lineHeight: 1.25 }}>{cert.name}</div>
+                  {cert.issuer && (
+                    <div style={{ fontSize: `${typography.bodySize - 2}pt`, color: theme.accentColor, fontWeight: 500 }}>{cert.issuer}</div>
+                  )}
+                  {cert.date && (
+                    <div style={{
+                      fontSize: `${typography.bodySize - 2.5}pt`,
+                      fontWeight: 600,
+                      letterSpacing: '0.08em',
+                      textTransform: 'uppercase',
+                      backgroundColor: `${theme.accentColor}1a`,
+                      color: theme.primaryColor,
+                      padding: '1px 5px',
+                      borderRadius: '99px',
+                      marginTop: '1px',
+                      width: 'fit-content',
+                    }}>
+                      {formatDate(cert.date)}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Footer */}
+        <div style={{
+          marginTop: 'auto',
+          paddingTop: '3mm',
+          borderTop: `1px solid ${theme.mutedColor}33`,
+          fontSize: `${typography.bodySize - 2.5}pt`,
+          color: theme.mutedColor,
+          letterSpacing: '0.06em',
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}>
+          <span>{[data.basics.name, data.basics.label].filter(Boolean).join(' · ')}</span>
+          <span>{[data.basics.location.city, new Date().getFullYear()].filter(Boolean).join(' · ')}</span>
+        </div>
+      </main>
+    </div>
+  );
+}
+
 // Export template map
 export const TEMPLATE_MAP: Record<string, React.ComponentType<{ data: CVData; theme: ThemeConfig; typography: TypographyConfig }>> = {
   classic: ClassicTemplate,
@@ -2085,4 +2533,5 @@ export const TEMPLATE_MAP: Record<string, React.ComponentType<{ data: CVData; th
   executive: ExecutiveTemplate,
   timeline: TimelineTemplate,
   infographic: InfographicTemplate,
+  elegant: ElegantTemplate,
 };

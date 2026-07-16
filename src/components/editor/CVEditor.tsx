@@ -14,7 +14,7 @@ import {
   ChevronDown, ChevronUp, GripVertical, Undo2, Redo2,
   Camera, Upload, X
 } from 'lucide-react';
-import type { CVData, Work, Education, Skill, Certificate, Language } from '@/types/cv';
+import type { CVData, Work, Education, Skill, Certificate, Language, Interest } from '@/types/cv';
 import { useCVStore } from '@/lib/store/cvStore';
 
 const generateId = () => Math.random().toString(36).substring(2, 15);
@@ -273,6 +273,19 @@ function PersonalInfoForm() {
             </SelectContent>
           </Select>
         </div>
+      </div>
+      <div>
+        <Label htmlFor="personalDetails" className="text-sm font-medium">Datos Personales</Label>
+        <Input
+          id="personalDetails"
+          value={cvData.basics.personalDetails ?? ''}
+          onChange={(e) => updateBasics({ personalDetails: e.target.value })}
+          placeholder="Chilena · Soltera · RUT 12.345.678-9"
+          className="mt-1.5"
+        />
+        <p className="text-xs text-muted-foreground mt-1.5">
+          Nacionalidad, estado civil, RUT. Solo aparece en la plantilla Elegant.
+        </p>
       </div>
       <div>
         <Label htmlFor="summary" className="text-sm font-medium">Resumen Profesional</Label>
@@ -801,6 +814,68 @@ function CertificatesForm() {
   );
 }
 
+// Interests Form (aptitudes / habilidades blandas)
+function InterestsForm() {
+  const { cvData, updateInterests } = useCVStore();
+
+  if (!cvData) return null;
+
+  const addNewInterest = () => {
+    const newInterest: Interest = {
+      id: generateId(),
+      name: '',
+      keywords: [],
+    };
+    updateInterests([...cvData.interests, newInterest]);
+  };
+
+  const updateInterestItem = (id: string, updates: Partial<Interest>) => {
+    updateInterests(cvData.interests.map(i => i.id === id ? { ...i, ...updates } : i));
+  };
+
+  const removeInterest = (id: string) => {
+    updateInterests(cvData.interests.filter(i => i.id !== id));
+  };
+
+  return (
+    <CollapsibleSection id="interests" title="Aptitudes" icon={SECTION_ICONS.interests}>
+      <AnimatePresence mode="popLayout">
+        {cvData.interests.map((item, idx) => (
+          <motion.div
+            key={item.id}
+            layout
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 10 }}
+            className="flex gap-3 items-end"
+          >
+            <div className="flex-1">
+              <Label className="text-xs font-medium">{idx === 0 ? 'Aptitud' : ''}</Label>
+              <Input
+                value={item.name}
+                onChange={(e) => updateInterestItem(item.id, { name: e.target.value })}
+                placeholder="Trabajo en equipo, Empatía, etc."
+                className="mt-1 h-9"
+              />
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => removeInterest(item.id)}
+              className="h-9 w-9 p-0 hover:bg-destructive/10 hover:text-destructive"
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </motion.div>
+        ))}
+      </AnimatePresence>
+      <Button variant="outline" onClick={addNewInterest} className="w-full h-9 border-dashed">
+        <Plus className="h-4 w-4 mr-2" /> Agregar Aptitud
+      </Button>
+    </CollapsibleSection>
+  );
+}
+
 // Main Editor Component
 export function CVEditor() {
   const { undo, redo, canUndo, canRedo } = useCVStore();
@@ -839,6 +914,7 @@ export function CVEditor() {
       <WorkForm />
       <EducationForm />
       <SkillsForm />
+      <InterestsForm />
       <LanguagesForm />
       <CertificatesForm />
     </div>

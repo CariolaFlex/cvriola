@@ -149,7 +149,7 @@ export function Dashboard() {
                 className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-medium text-primary mb-4"
               >
                 <Zap className="h-3.5 w-3.5" />
-                Nuevo · 8 plantillas premium con foto
+                Nuevo · 9 plantillas premium con foto
               </motion.div>
               <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-3">
                 Diseña un CV que{' '}
@@ -361,7 +361,7 @@ export function Dashboard() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
-              { icon: Layout, title: '8 Plantillas', desc: 'Classic, Modern, Executive, Timeline, Infographic y más', color: 'text-blue-500', bg: 'bg-blue-500/10' },
+              { icon: Layout, title: '9 Plantillas', desc: 'Classic, Modern, Executive, Timeline, Elegant y más', color: 'text-blue-500', bg: 'bg-blue-500/10' },
               { icon: ImageIcon, title: 'Fotos de perfil', desc: 'Sube tu foto y aparece en plantillas compatibles', color: 'text-violet-500', bg: 'bg-violet-500/10' },
               { icon: Palette, title: 'Temas personalizables', desc: '8 paletas y 6 tipografías profesionales', color: 'text-amber-500', bg: 'bg-amber-500/10' },
               { icon: Download, title: 'Export PDF', desc: 'A4, Letter y Legal · calidad de imprenta', color: 'text-emerald-500', bg: 'bg-emerald-500/10' },

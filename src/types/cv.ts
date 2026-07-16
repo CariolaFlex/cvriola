@@ -24,6 +24,8 @@ export interface Basics {
   image: string;
   location: Location;
   profiles: Profile[];
+  /** Texto libre para datos como nacionalidad, estado civil o RUT. Opcional: los CVs guardados antes de este campo no lo tienen. */
+  personalDetails?: string;
 }
 
 export interface Work {
