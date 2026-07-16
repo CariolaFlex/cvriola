@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { ZoomIn, ZoomOut, RotateCcw, Maximize2 } from 'lucide-react';
 import { useCVStore } from '@/lib/store/cvStore';
 import { TEMPLATE_MAP } from '@/components/templates/CVTemplates';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 export function CVPreview() {
   const { cvData } = useCVStore();
@@ -107,29 +107,32 @@ export function CVPreview() {
       </motion.div>
 
       {/* Preview Container */}
+      {/* El zoom vive en un div aparte: si se pasa `transform` por style a un motion.div
+          que además anima `scale`, framer-motion se queda clavado en el valor inicial y
+          el zoom nunca se aplica. La animación de cambio de plantilla usa solo opacidad. */}
       <div className="flex-1 overflow-auto p-6 flex justify-center">
-        <AnimatePresence mode="wait">
+        <div
+          style={{
+            transform: `scale(${zoom})`,
+            transformOrigin: 'top center',
+          }}
+          className="transition-transform duration-200 ease-out"
+        >
           <motion.div
             key={cvData.meta.templateId}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.2 }}
             ref={previewRef}
-            style={{
-              transform: `scale(${zoom})`,
-              transformOrigin: 'top center',
-            }}
-            className="transition-transform duration-200 ease-out"
           >
-            <div 
+            <div
               className="shadow-2xl rounded-sm overflow-hidden"
               style={{ boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)' }}
             >
               <Template data={cvData} theme={theme} typography={typography} />
             </div>
           </motion.div>
-        </AnimatePresence>
+        </div>
       </div>
     </div>
   );
