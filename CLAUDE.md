@@ -6,3 +6,7 @@
 > Las rutas de este repo ya se actualizaron; si aparece una ruta vieja, es un resto: corregirla.
 > Plan y bitácora: `C:\Cariolaspace\CariolaConfig\Cariolaspace\PLAN-REORGANIZACION-C.md`.
 > **Catálogo de Vectium:** demo que vive solo en GitHub + Vercel, sin bases de datos ni nube.
+
+**Retomar en `ESTADO.md`:** estado al 2026-11-12, conexiones (Vercel sin git: se publica por CLI),
+cómo levantarlo en el Mac (`npm install && npx prisma generate`) y pendientes. 🔴 El repo es público
+y tiene un CV real de una tercera persona en `upload/` y `download/`: decisión pendiente de Andrés.
